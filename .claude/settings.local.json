@@ -4,7 +4,17 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(npx tailwindcss init:*)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(npm run type-check:*)",
+      "Bash(npm run lint)",
+      "WebSearch",
+      "WebFetch(domain:ai-sdk.dev)",
+      "Bash(npm run build:*)",
+      "Bash(dir:*)"
     ],
     "deny": [],
     "ask": []

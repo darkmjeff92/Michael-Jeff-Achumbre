@@ -1,0 +1,368 @@
+@import "tailwindcss";
+
+@theme {
+  /* Lightning Design System - Color Palette */
+  --color-lightning-black: #000000;
+  --color-lightning-dark: #0a0a0a;
+  --color-lightning-gray: #1a1a1a;
+  --color-lightning-white: #ffffff;
+  --color-lightning-yellow: #FFD700;
+  --color-lightning-orange: #FF6B35;
+
+  /* Base Color System */
+  --color-background: var(--color-lightning-black);
+  --color-foreground: var(--color-lightning-white);
+  --color-muted: var(--color-lightning-gray);
+  --color-accent: var(--color-lightning-yellow);
+  --color-accent-secondary: var(--color-lightning-orange);
+
+  /* Typography Scale */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.75rem;
+  --font-size-7xl: 4.5rem;
+  --font-size-8xl: 6rem;
+  --font-size-9xl: 8rem;
+
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
+  /* Spacing Scale */
+  --spacing-px: 1px;
+  --spacing-0: 0;
+  --spacing-0_5: 0.125rem;
+  --spacing-1: 0.25rem;
+  --spacing-1_5: 0.375rem;
+  --spacing-2: 0.5rem;
+  --spacing-2_5: 0.625rem;
+  --spacing-3: 0.75rem;
+  --spacing-3_5: 0.875rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-10: 2.5rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+  --spacing-20: 5rem;
+  --spacing-24: 6rem;
+  --spacing-32: 8rem;
+  --spacing-40: 10rem;
+  --spacing-48: 12rem;
+  --spacing-56: 14rem;
+  --spacing-64: 16rem;
+
+  /* Border Radius */
+  --radius: 0.5rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+  --radius-full: 9999px;
+
+  /* Custom Breakpoints */
+  --breakpoint-fold: 280px;      /* Fold devices */
+  --breakpoint-xs: 375px;        /* Small mobile */
+  --breakpoint-sm: 640px;        /* Large mobile */
+  --breakpoint-md: 768px;        /* Small tablet */
+  --breakpoint-tablet: 900px;    /* Tablet portrait */
+  --breakpoint-lg: 1024px;       /* Tablet landscape */
+  --breakpoint-tablet-lg: 1200px;/* Large tablet */
+  --breakpoint-xl: 1440px;       /* Desktop */
+  --breakpoint-2xl: 1920px;      /* Large desktop */
+  --breakpoint-4k: 2560px;       /* 4K displays */
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+  /* Lightning-specific glow effects */
+  --shadow-lightning-yellow: 0 0 20px var(--color-lightning-yellow);
+  --shadow-lightning-orange: 0 0 20px var(--color-lightning-orange);
+}
+
+/* Base Styles */
+* {
+  border-color: var(--color-lightning-gray);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* Account for fixed navbar */
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  color: var(--color-foreground);
+  background: var(--color-background);
+  font-feature-settings: "rlig" 1, "calt" 1;
+  /* Performance optimizations */
+  transform: translateZ(0); /* Create new stacking context for GPU acceleration */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Performance optimizations for animations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* Optimize repaints for elements that frequently change */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+}
+
+/* Focus styles for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--color-lightning-yellow);
+  outline-offset: 2px;
+}
+
+/* Custom focus styles for buttons and links */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-lightning-yellow);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Custom utility classes */
+.text-lightning-yellow {
+  color: var(--color-lightning-yellow);
+}
+
+.text-lightning-orange {
+  color: var(--color-lightning-orange);
+}
+
+.bg-lightning-black {
+  background-color: var(--color-lightning-black);
+}
+
+.bg-lightning-dark {
+  background-color: var(--color-lightning-dark);
+}
+
+.bg-lightning-gray {
+  background-color: var(--color-lightning-gray);
+}
+
+.border-lightning-gray {
+  border-color: var(--color-lightning-gray);
+}
+
+.shadow-lightning-yellow {
+  box-shadow: var(--shadow-lightning-yellow);
+}
+
+.shadow-lightning-orange {
+  box-shadow: var(--shadow-lightning-orange);
+}
+
+/* Gradient utilities */
+.bg-lightning-gradient {
+  background: linear-gradient(135deg, var(--color-lightning-yellow) 0%, var(--color-lightning-orange) 100%);
+}
+
+.text-lightning-gradient {
+  background: linear-gradient(135deg, var(--color-lightning-yellow) 0%, var(--color-lightning-orange) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Typography styles for Impact headlines */
+.text-impact {
+  font-weight: var(--font-weight-black);
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+}
+
+/* Animation utilities */
+.animate-lightning-pulse {
+  animation: lightning-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes lightning-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Custom breakpoint utilities */
+@media (min-width: 280px) {
+  .fold\:block { display: block; }
+  .fold\:hidden { display: none; }
+  .fold\:flex { display: flex; }
+  .fold\:grid { display: grid; }
+  .fold\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .fold\:text-xs { font-size: var(--font-size-xs); }
+  .fold\:text-sm { font-size: var(--font-size-sm); }
+  .fold\:text-base { font-size: var(--font-size-base); }
+  .fold\:text-lg { font-size: var(--font-size-lg); }
+  .fold\:text-xl { font-size: var(--font-size-xl); }
+  .fold\:text-2xl { font-size: var(--font-size-2xl); }
+  .fold\:px-1 { padding-left: var(--spacing-1); padding-right: var(--spacing-1); }
+  .fold\:px-2 { padding-left: var(--spacing-2); padding-right: var(--spacing-2); }
+  .fold\:px-3 { padding-left: var(--spacing-3); padding-right: var(--spacing-3); }
+  .fold\:py-1 { padding-top: var(--spacing-1); padding-bottom: var(--spacing-1); }
+  .fold\:py-2 { padding-top: var(--spacing-2); padding-bottom: var(--spacing-2); }
+  .fold\:py-3 { padding-top: var(--spacing-3); padding-bottom: var(--spacing-3); }
+  .fold\:py-8 { padding-top: var(--spacing-8); padding-bottom: var(--spacing-8); }
+  .fold\:py-6 { padding-top: var(--spacing-6); padding-bottom: var(--spacing-6); }
+  .fold\:px-4 { padding-left: var(--spacing-4); padding-right: var(--spacing-4); }
+  .fold\:mt-4 { margin-top: var(--spacing-4); }
+  .fold\:mt-5 { margin-top: var(--spacing-5); }
+  .fold\:w-full { width: 100%; }
+  .fold\:w-24 { width: 6rem; }
+  .fold\:h-24 { height: 6rem; }
+  .fold\:w-32 { width: 8rem; }
+  .fold\:h-32 { height: 8rem; }
+  .fold\:w-36 { width: 9rem; }
+  .fold\:h-44 { height: 11rem; }
+  .fold\:leading-snug { line-height: 1.375; }
+  .fold\:leading-relaxed { line-height: 1.625; }
+  .fold\:leading-tight { line-height: 1.25; }
+  .fold\:font-medium { font-weight: var(--font-weight-medium); }
+  .fold\:gap-1 { gap: var(--spacing-1); }
+  .fold\:gap-2 { gap: var(--spacing-2); }
+  .fold\:gap-3 { gap: var(--spacing-3); }
+  .fold\:space-y-2 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: var(--spacing-2);
+  }
+  .fold\:space-y-3 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: var(--spacing-3);
+  }
+  .fold\:space-x-2 > :not([hidden]) ~ :not([hidden]) {
+    margin-left: var(--spacing-2);
+  }
+  .fold\:max-w-full { max-width: 100%; }
+  .fold\:w-full { width: 100%; }
+  .fold\:h-11 { height: 2.75rem; }
+  .fold\:h-12 { height: 3rem; }
+  .fold\:w-11 { width: 2.75rem; }
+  .fold\:text-base { font-size: var(--font-size-base); }
+  .fold\:py-3 { padding-top: var(--spacing-3); padding-bottom: var(--spacing-3); }
+  .fold\:px-4 { padding-left: var(--spacing-4); padding-right: var(--spacing-4); }
+  .fold\:pt-16 { padding-top: var(--spacing-16); }
+  .fold\:pb-8 { padding-bottom: var(--spacing-8); }
+  .fold\:leading-tight { line-height: 1.25; }
+}
+
+@media (min-width: 375px) {
+  .xs\:block { display: block; }
+  .xs\:flex { display: flex; }
+  .xs\:grid { display: grid; }
+  .xs\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .xs\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .xs\:text-sm { font-size: var(--font-size-sm); }
+  .xs\:text-base { font-size: var(--font-size-base); }
+  .xs\:text-lg { font-size: var(--font-size-lg); }
+  .xs\:text-xl { font-size: var(--font-size-xl); }
+  .xs\:text-2xl { font-size: var(--font-size-2xl); }
+  .xs\:text-3xl { font-size: var(--font-size-3xl); }
+  .xs\:px-2 { padding-left: var(--spacing-2); padding-right: var(--spacing-2); }
+  .xs\:px-3 { padding-left: var(--spacing-3); padding-right: var(--spacing-3); }
+  .xs\:px-4 { padding-left: var(--spacing-4); padding-right: var(--spacing-4); }
+  .xs\:py-2 { padding-top: var(--spacing-2); padding-bottom: var(--spacing-2); }
+  .xs\:py-3 { padding-top: var(--spacing-3); padding-bottom: var(--spacing-3); }
+  .xs\:gap-2 { gap: var(--spacing-2); }
+  .xs\:gap-3 { gap: var(--spacing-3); }
+  .xs\:gap-4 { gap: var(--spacing-4); }
+  .xs\:space-y-3 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: var(--spacing-3);
+  }
+  .xs\:space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: var(--spacing-4);
+  }
+  .xs\:space-x-3 > :not([hidden]) ~ :not([hidden]) {
+    margin-left: var(--spacing-3);
+  }
+  .xs\:w-28 { width: 7rem; }
+  .xs\:h-28 { height: 7rem; }
+  .xs\:w-36 { width: 9rem; }
+  .xs\:h-36 { height: 9rem; }
+  .xs\:w-40 { width: 10rem; }
+  .xs\:h-52 { height: 13rem; }
+  .xs\:h-11 { height: 2.75rem; }
+  .xs\:h-10 { height: 2.5rem; }
+  .xs\:w-11 { width: 2.75rem; }
+  .xs\:w-10 { width: 2.5rem; }
+  .xs\:pt-18 { padding-top: 4.5rem; }
+  .xs\:pb-10 { padding-bottom: 2.5rem; }
+  .xs\:leading-snug { line-height: 1.375; }
+}
+
+@media (min-width: 900px) {
+  .tablet\:block { display: block; }
+  .tablet\:flex { display: flex; }
+  .tablet\:hidden { display: none; }
+  .tablet\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tablet\:text-5xl { font-size: var(--font-size-5xl); }
+  .tablet\:text-6xl { font-size: var(--font-size-6xl); }
+  .tablet\:px-6 { padding-left: var(--spacing-6); padding-right: var(--spacing-6); }
+  .tablet\:py-4 { padding-top: var(--spacing-4); padding-bottom: var(--spacing-4); }
+  .tablet\:gap-6 { gap: var(--spacing-6); }
+  .tablet\:space-x-6 > :not([hidden]) ~ :not([hidden]) {
+    margin-left: var(--spacing-6);
+  }
+}
+
+@media (min-width: 1200px) {
+  .tablet-lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .tablet-lg\:text-6xl { font-size: var(--font-size-6xl); }
+  .tablet-lg\:text-7xl { font-size: var(--font-size-7xl); }
+  .tablet-lg\:px-8 { padding-left: var(--spacing-8); padding-right: var(--spacing-8); }
+}
+
+@media (min-width: 2560px) {
+  .ultra\:text-8xl { font-size: var(--font-size-8xl); }
+  .ultra\:text-9xl { font-size: var(--font-size-9xl); }
+  .ultra\:px-16 { padding-left: var(--spacing-16); padding-right: var(--spacing-16); }
+  .ultra\:py-12 { padding-top: var(--spacing-12); padding-bottom: var(--spacing-12); }
+  .ultra\:gap-12 { gap: var(--spacing-12); }
+  .ultra\:max-w-8xl { max-width: 96rem; }
+}
