@@ -12,10 +12,11 @@ interface MobileNavigationProps {
 
 const navigationItems = [
   { href: '#hero', label: 'Home' },
-  { href: '#about', label: 'About' },
-  { href: '#services', label: 'Services' },
-  { href: '#case-study', label: 'Case Study' },
-  { href: '#contact', label: 'Contact' },
+  { href: '#journey', label: 'Journey' },
+  { href: '#skills', label: 'Skills' },
+  { href: '#projects', label: 'Projects' },
+  { href: '#ai-lab', label: 'AI Lab' },
+  { href: '#connect', label: 'Connect' },
 ]
 
 export function MobileNavigation({ className = "" }: MobileNavigationProps) {
@@ -121,9 +122,9 @@ export function MobileNavigation({ className = "" }: MobileNavigationProps) {
                 duration: 0.4,
                 ease: [0.23, 1, 0.32, 1]
               }}
-              className="h-full bg-lightning-dark border-l border-lightning-gray ml-auto fold:w-full xs:w-80 w-96"
+              className="h-full bg-lightning-dark border-l border-lightning-gray ml-auto w-full sm:w-80 md:w-96"
             >
-              <nav className="flex flex-col fold:p-4 xs:p-6 p-8 fold:space-y-6 xs:space-y-7 space-y-8">
+              <nav className="flex flex-col p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-7 md:space-y-8">
                 {navigationItems.map((item, index) => (
                   <motion.div
                     key={item.href}
@@ -138,7 +139,7 @@ export function MobileNavigation({ className = "" }: MobileNavigationProps) {
                     <SmoothScrollLink
                       href={item.href}
                       onClick={handleItemClick}
-                      className="block fold:text-lg xs:text-xl text-xl font-medium text-lightning-white hover:text-lightning-yellow transition-colors duration-200 fold:py-3 xs:py-3 py-2"
+                      className="block text-lg sm:text-xl font-medium text-lightning-white hover:text-lightning-yellow transition-colors duration-200 py-2 sm:py-3"
                       aria-label={`Navigate to ${item.label} section`}
                     >
                       {item.label}
@@ -162,11 +163,11 @@ export function MobileNavigation({ className = "" }: MobileNavigationProps) {
                     className="w-full bg-lightning-gradient text-lightning-black font-semibold hover:opacity-90"
                   >
                     <SmoothScrollLink
-                      href="#contact"
+                      href="#connect"
                       onClick={handleItemClick}
-                      aria-label="Start your project - navigate to contact section"
+                      aria-label="Connect with me - navigate to connect section"
                     >
-                      Start Your Project
+                      Let's Connect
                     </SmoothScrollLink>
                   </Button>
                 </motion.div>

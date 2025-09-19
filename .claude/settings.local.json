@@ -14,7 +14,10 @@
       "WebSearch",
       "WebFetch(domain:ai-sdk.dev)",
       "Bash(npm run build:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "WebFetch(domain:linear.app)",
+      "WebFetch(domain:framer.com)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

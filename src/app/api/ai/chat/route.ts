@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     }
 
     const result = await streamText({
-      model: openai('gpt-4o-mini'),
+      model: openai('gpt-5-mini'),
       messages: [
         {
           role: 'system',

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'motion/react'
+import Image from 'next/image'
 import { LoadingSpinner } from './loading-spinner'
 
 interface LazyImageProps {
@@ -90,22 +91,26 @@ export function LazyImage({
 
       {/* Actual Image */}
       {isInView && (
-        <motion.img
-          src={src}
-          alt={alt}
-          width={width}
-          height={height}
-          onLoad={handleLoad}
-          onError={handleError}
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: isLoaded ? 1 : 0 }}
           transition={{ duration: 0.3 }}
-          className={`${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${
+          className={`relative w-full h-full ${isLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ${
             error ? 'filter grayscale' : ''
           }`}
-          loading={priority ? 'eager' : 'lazy'}
-          decoding="async"
-        />
+        >
+          <Image
+            src={src}
+            alt={alt}
+            width={width}
+            height={height}
+            onLoad={handleLoad}
+            onError={handleError}
+            priority={priority}
+            sizes={width && height ? `${width}px` : '(max-width: 768px) 100vw, 50vw'}
+            className="object-cover"
+          />
+        </motion.div>
       )}
 
       {/* Error state */}

@@ -13,19 +13,68 @@ interface Message {
   timestamp: Date
 }
 
+interface DocumentSession {
+  id: string
+  filename: string
+  uploadedAt: Date
+  expiresAt: Date
+  wordCount?: number
+}
+
 interface SimpleAIChatProps {
   context?: string
   autoOpen?: boolean
 }
 
 const quickQuestions = [
-  "What services do you offer?",
-  "How does AI-powered development work?",
-  "What's your availability like?",
-  "Can you tell me about the gracekimkor.com project?",
-  "What makes you different from other developers?",
-  "How do you handle projects around your factory schedule?"
+  "How did you build this RAG document system?",
+  "What AI development tools do you use?",
+  "Can you explain the gracekimkor.com technical implementation?",
+  "How does your Lightning theme component system work?",
+  "What's your AI-enhanced development workflow like?",
+  "How do you integrate AI SDK v5 with Next.js?"
 ]
+
+const documentAwareQuestions = [
+  "How does the document processing pipeline work?",
+  "What vector database technology powers this?",
+  "How do you handle document chunking and embeddings?",
+  "What's the architecture behind the RAG system?",
+  "How do you ensure document privacy and security?",
+  "What AI models are used for document analysis?"
+]
+
+// Utility functions for document session management
+const getDocumentSession = (): DocumentSession | null => {
+  if (typeof window === 'undefined') return null
+
+  try {
+    const sessionData = sessionStorage.getItem('ragDocumentSession')
+    if (!sessionData) return null
+
+    const session: DocumentSession = JSON.parse(sessionData)
+
+    // Check if session has expired
+    if (new Date() > new Date(session.expiresAt)) {
+      sessionStorage.removeItem('ragDocumentSession')
+      return null
+    }
+
+    return session
+  } catch {
+    return null
+  }
+}
+
+const setDocumentSession = (session: DocumentSession) => {
+  if (typeof window === 'undefined') return
+
+  try {
+    sessionStorage.setItem('ragDocumentSession', JSON.stringify(session))
+  } catch {
+    // Handle storage errors silently
+  }
+}
 
 export function SimpleAIChat({ context = 'general', autoOpen = false }: SimpleAIChatProps) {
   const [isOpen, setIsOpen] = useState(autoOpen)
@@ -33,7 +82,43 @@ export function SimpleAIChat({ context = 'general', autoOpen = false }: SimpleAI
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [showQuickQuestions, setShowQuickQuestions] = useState(true)
+  const [documentSession, setDocumentSessionState] = useState<DocumentSession | null>(null)
+  const [documentAware, setDocumentAware] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    console.log('💬 SimpleAIChat component mounted', { isOpen, context })
+
+    // Check for document session on mount and periodically
+    const checkDocumentSession = () => {
+      const session = getDocumentSession()
+      setDocumentSessionState(session)
+      setDocumentAware(!!session)
+    }
+
+    checkDocumentSession()
+
+    // Check for document session changes every 5 seconds
+    const interval = setInterval(checkDocumentSession, 5000)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  // Listen for storage changes (when document is uploaded in another tab/component)
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'ragDocumentSession') {
+        const session = getDocumentSession()
+        setDocumentSessionState(session)
+        setDocumentAware(!!session)
+      }
+    }
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('storage', handleStorageChange)
+      return () => window.removeEventListener('storage', handleStorageChange)
+    }
+  }, [])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -66,7 +151,8 @@ export function SimpleAIChat({ context = 'general', autoOpen = false }: SimpleAI
             role: msg.role,
             content: msg.content
           })),
-          context
+          context: documentAware ? 'document-aware' : context,
+          documentSession: documentSession
         })
       })
 
@@ -128,7 +214,15 @@ export function SimpleAIChat({ context = 'general', autoOpen = false }: SimpleAI
 
   if (!isOpen) {
     return (
-      <div className="fixed bottom-6 right-6 z-50">
+      <div
+        style={{
+          position: 'fixed',
+          bottom: '1.5rem',
+          right: '1.5rem',
+          zIndex: 60
+        }}
+        data-testid="chat-bubble-closed"
+      >
         <LightningPulse>
           <HoverScale scale={1.1}>
             <Button
@@ -147,13 +241,26 @@ export function SimpleAIChat({ context = 'general', autoOpen = false }: SimpleAI
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div
+      style={{
+        position: 'fixed',
+        bottom: '1.5rem',
+        right: '1.5rem',
+        zIndex: 60
+      }}
+      data-testid="chat-bubble-open"
+    >
       <SlideIn direction="up" duration={0.3}>
         <Card className="w-96 h-[500px] bg-lightning-dark border-lightning-yellow/50 shadow-2xl">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-lightning-yellow flex items-center gap-2">
                 <span>🤖</span> AI Assistant
+                {documentAware && (
+                  <span className="text-xs bg-lightning-orange text-lightning-black px-2 py-1 rounded-full">
+                    📄 Document Mode
+                  </span>
+                )}
               </CardTitle>
               <Button
                 variant="ghost"
@@ -166,8 +273,19 @@ export function SimpleAIChat({ context = 'general', autoOpen = false }: SimpleAI
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <p className="text-xs text-gray-400">Ask me about Michael&apos;s services</p>
+              <p className="text-xs text-gray-400">
+                {documentAware && documentSession
+                  ? `Analyzing: ${documentSession.filename}`
+                  : "Ask me about Michael's services"}
+              </p>
             </div>
+            {documentAware && documentSession && (
+              <div className="mt-2 p-2 bg-lightning-orange/10 border border-lightning-orange/30 rounded text-xs">
+                <p className="text-lightning-orange">
+                  ✨ I can now answer questions about your uploaded document AND Michael's services!
+                </p>
+              </div>
+            )}
           </CardHeader>
 
           <CardContent className="flex flex-col h-[400px] p-0">
@@ -177,11 +295,15 @@ export function SimpleAIChat({ context = 'general', autoOpen = false }: SimpleAI
                 <FadeIn>
                   <div className="space-y-3">
                     <p className="text-sm text-gray-300 text-center">
-                      Hi! I&apos;m Michael&apos;s AI assistant. Ask me anything about his services, experience, or projects.
+                      {documentAware && documentSession
+                        ? `Hi! I can help you understand your document "${documentSession.filename}" and explain the technical details of how this RAG system works.`
+                        : "Hi! I'm Michael's AI assistant. Ask me about his technical journey, AI development workflow, or how he built this portfolio."}
                     </p>
                     <div className="space-y-2">
-                      <p className="text-xs text-lightning-orange font-medium">Quick questions:</p>
-                      {quickQuestions.slice(0, 3).map((question, index) => (
+                      <p className="text-xs text-lightning-orange font-medium">
+                        {documentAware ? "Technical questions about the RAG system:" : "Technical questions:"}
+                      </p>
+                      {(documentAware ? documentAwareQuestions : quickQuestions).slice(0, 3).map((question, index) => (
                         <Button
                           key={index}
                           variant="ghost"
@@ -244,7 +366,7 @@ export function SimpleAIChat({ context = 'general', autoOpen = false }: SimpleAI
                 <Input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask about services, availability, projects..."
+                  placeholder="Ask about technical details, AI workflow, projects..."
                   disabled={isLoading}
                   className="flex-1 text-sm"
                   autoFocus
@@ -261,7 +383,7 @@ export function SimpleAIChat({ context = 'general', autoOpen = false }: SimpleAI
 
               {messages.length === 0 && (
                 <div className="mt-2 flex flex-wrap gap-1">
-                  {quickQuestions.slice(3, 6).map((question, index) => (
+                  {(documentAware ? documentAwareQuestions : quickQuestions).slice(3, 6).map((question, index) => (
                     <Button
                       key={index}
                       variant="ghost"

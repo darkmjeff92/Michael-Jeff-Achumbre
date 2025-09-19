@@ -75,17 +75,12 @@
   --radius-3xl: 2rem;
   --radius-full: 9999px;
 
-  /* Custom Breakpoints */
-  --breakpoint-fold: 280px;      /* Fold devices */
-  --breakpoint-xs: 375px;        /* Small mobile */
-  --breakpoint-sm: 640px;        /* Large mobile */
-  --breakpoint-md: 768px;        /* Small tablet */
-  --breakpoint-tablet: 900px;    /* Tablet portrait */
-  --breakpoint-lg: 1024px;       /* Tablet landscape */
-  --breakpoint-tablet-lg: 1200px;/* Large tablet */
-  --breakpoint-xl: 1440px;       /* Desktop */
-  --breakpoint-2xl: 1920px;      /* Large desktop */
-  --breakpoint-4k: 2560px;       /* 4K displays */
+  /* Standard Tailwind Breakpoints */
+  --breakpoint-sm: 640px;        /* Small devices */
+  --breakpoint-md: 768px;        /* Medium devices */
+  --breakpoint-lg: 1024px;       /* Large devices */
+  --breakpoint-xl: 1280px;       /* Extra large devices */
+  --breakpoint-2xl: 1536px;      /* 2X large devices */
 
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -131,7 +126,6 @@ body {
   background: var(--color-background);
   font-feature-settings: "rlig" 1, "calt" 1;
   /* Performance optimizations */
-  transform: translateZ(0); /* Create new stacking context for GPU acceleration */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -204,6 +198,10 @@ a:focus-visible {
   background: linear-gradient(135deg, var(--color-lightning-yellow) 0%, var(--color-lightning-orange) 100%);
 }
 
+.bg-gradient-radial {
+  background-image: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
 .text-lightning-gradient {
   background: linear-gradient(135deg, var(--color-lightning-yellow) 0%, var(--color-lightning-orange) 100%);
   -webkit-background-clip: text;
@@ -232,137 +230,25 @@ a:focus-visible {
   }
 }
 
-/* Custom breakpoint utilities */
-@media (min-width: 280px) {
-  .fold\:block { display: block; }
-  .fold\:hidden { display: none; }
-  .fold\:flex { display: flex; }
-  .fold\:grid { display: grid; }
-  .fold\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-  .fold\:text-xs { font-size: var(--font-size-xs); }
-  .fold\:text-sm { font-size: var(--font-size-sm); }
-  .fold\:text-base { font-size: var(--font-size-base); }
-  .fold\:text-lg { font-size: var(--font-size-lg); }
-  .fold\:text-xl { font-size: var(--font-size-xl); }
-  .fold\:text-2xl { font-size: var(--font-size-2xl); }
-  .fold\:px-1 { padding-left: var(--spacing-1); padding-right: var(--spacing-1); }
-  .fold\:px-2 { padding-left: var(--spacing-2); padding-right: var(--spacing-2); }
-  .fold\:px-3 { padding-left: var(--spacing-3); padding-right: var(--spacing-3); }
-  .fold\:py-1 { padding-top: var(--spacing-1); padding-bottom: var(--spacing-1); }
-  .fold\:py-2 { padding-top: var(--spacing-2); padding-bottom: var(--spacing-2); }
-  .fold\:py-3 { padding-top: var(--spacing-3); padding-bottom: var(--spacing-3); }
-  .fold\:py-8 { padding-top: var(--spacing-8); padding-bottom: var(--spacing-8); }
-  .fold\:py-6 { padding-top: var(--spacing-6); padding-bottom: var(--spacing-6); }
-  .fold\:px-4 { padding-left: var(--spacing-4); padding-right: var(--spacing-4); }
-  .fold\:mt-4 { margin-top: var(--spacing-4); }
-  .fold\:mt-5 { margin-top: var(--spacing-5); }
-  .fold\:w-full { width: 100%; }
-  .fold\:w-24 { width: 6rem; }
-  .fold\:h-24 { height: 6rem; }
-  .fold\:w-32 { width: 8rem; }
-  .fold\:h-32 { height: 8rem; }
-  .fold\:w-36 { width: 9rem; }
-  .fold\:h-44 { height: 11rem; }
-  .fold\:leading-snug { line-height: 1.375; }
-  .fold\:leading-relaxed { line-height: 1.625; }
-  .fold\:leading-tight { line-height: 1.25; }
-  .fold\:font-medium { font-weight: var(--font-weight-medium); }
-  .fold\:gap-1 { gap: var(--spacing-1); }
-  .fold\:gap-2 { gap: var(--spacing-2); }
-  .fold\:gap-3 { gap: var(--spacing-3); }
-  .fold\:space-y-2 > :not([hidden]) ~ :not([hidden]) {
-    margin-top: var(--spacing-2);
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
   }
-  .fold\:space-y-3 > :not([hidden]) ~ :not([hidden]) {
-    margin-top: var(--spacing-3);
-  }
-  .fold\:space-x-2 > :not([hidden]) ~ :not([hidden]) {
-    margin-left: var(--spacing-2);
-  }
-  .fold\:max-w-full { max-width: 100%; }
-  .fold\:w-full { width: 100%; }
-  .fold\:h-11 { height: 2.75rem; }
-  .fold\:h-12 { height: 3rem; }
-  .fold\:w-11 { width: 2.75rem; }
-  .fold\:text-base { font-size: var(--font-size-base); }
-  .fold\:py-3 { padding-top: var(--spacing-3); padding-bottom: var(--spacing-3); }
-  .fold\:px-4 { padding-left: var(--spacing-4); padding-right: var(--spacing-4); }
-  .fold\:pt-16 { padding-top: var(--spacing-16); }
-  .fold\:pb-8 { padding-bottom: var(--spacing-8); }
-  .fold\:leading-tight { line-height: 1.25; }
-}
-
-@media (min-width: 375px) {
-  .xs\:block { display: block; }
-  .xs\:flex { display: flex; }
-  .xs\:grid { display: grid; }
-  .xs\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-  .xs\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .xs\:text-sm { font-size: var(--font-size-sm); }
-  .xs\:text-base { font-size: var(--font-size-base); }
-  .xs\:text-lg { font-size: var(--font-size-lg); }
-  .xs\:text-xl { font-size: var(--font-size-xl); }
-  .xs\:text-2xl { font-size: var(--font-size-2xl); }
-  .xs\:text-3xl { font-size: var(--font-size-3xl); }
-  .xs\:px-2 { padding-left: var(--spacing-2); padding-right: var(--spacing-2); }
-  .xs\:px-3 { padding-left: var(--spacing-3); padding-right: var(--spacing-3); }
-  .xs\:px-4 { padding-left: var(--spacing-4); padding-right: var(--spacing-4); }
-  .xs\:py-2 { padding-top: var(--spacing-2); padding-bottom: var(--spacing-2); }
-  .xs\:py-3 { padding-top: var(--spacing-3); padding-bottom: var(--spacing-3); }
-  .xs\:gap-2 { gap: var(--spacing-2); }
-  .xs\:gap-3 { gap: var(--spacing-3); }
-  .xs\:gap-4 { gap: var(--spacing-4); }
-  .xs\:space-y-3 > :not([hidden]) ~ :not([hidden]) {
-    margin-top: var(--spacing-3);
-  }
-  .xs\:space-y-4 > :not([hidden]) ~ :not([hidden]) {
-    margin-top: var(--spacing-4);
-  }
-  .xs\:space-x-3 > :not([hidden]) ~ :not([hidden]) {
-    margin-left: var(--spacing-3);
-  }
-  .xs\:w-28 { width: 7rem; }
-  .xs\:h-28 { height: 7rem; }
-  .xs\:w-36 { width: 9rem; }
-  .xs\:h-36 { height: 9rem; }
-  .xs\:w-40 { width: 10rem; }
-  .xs\:h-52 { height: 13rem; }
-  .xs\:h-11 { height: 2.75rem; }
-  .xs\:h-10 { height: 2.5rem; }
-  .xs\:w-11 { width: 2.75rem; }
-  .xs\:w-10 { width: 2.5rem; }
-  .xs\:pt-18 { padding-top: 4.5rem; }
-  .xs\:pb-10 { padding-bottom: 2.5rem; }
-  .xs\:leading-snug { line-height: 1.375; }
-}
-
-@media (min-width: 900px) {
-  .tablet\:block { display: block; }
-  .tablet\:flex { display: flex; }
-  .tablet\:hidden { display: none; }
-  .tablet\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .tablet\:text-5xl { font-size: var(--font-size-5xl); }
-  .tablet\:text-6xl { font-size: var(--font-size-6xl); }
-  .tablet\:px-6 { padding-left: var(--spacing-6); padding-right: var(--spacing-6); }
-  .tablet\:py-4 { padding-top: var(--spacing-4); padding-bottom: var(--spacing-4); }
-  .tablet\:gap-6 { gap: var(--spacing-6); }
-  .tablet\:space-x-6 > :not([hidden]) ~ :not([hidden]) {
-    margin-left: var(--spacing-6);
+  to {
+    transform: rotate(360deg);
   }
 }
 
-@media (min-width: 1200px) {
-  .tablet-lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .tablet-lg\:text-6xl { font-size: var(--font-size-6xl); }
-  .tablet-lg\:text-7xl { font-size: var(--font-size-7xl); }
-  .tablet-lg\:px-8 { padding-left: var(--spacing-8); padding-right: var(--spacing-8); }
-}
-
-@media (min-width: 2560px) {
-  .ultra\:text-8xl { font-size: var(--font-size-8xl); }
-  .ultra\:text-9xl { font-size: var(--font-size-9xl); }
-  .ultra\:px-16 { padding-left: var(--spacing-16); padding-right: var(--spacing-16); }
-  .ultra\:py-12 { padding-top: var(--spacing-12); padding-bottom: var(--spacing-12); }
-  .ultra\:gap-12 { gap: var(--spacing-12); }
-  .ultra\:max-w-8xl { max-width: 96rem; }
-}
+/* Responsive Design Notes */
+/*
+ * Using standard Tailwind CSS responsive design:
+ * - Mobile first approach starting at 360px (no custom breakpoints needed)
+ * - sm: (640px+) - Small devices and up
+ * - md: (768px+) - Medium devices and up
+ * - lg: (1024px+) - Large devices and up
+ * - xl: (1280px+) - Extra large devices and up
+ * - 2xl: (1536px+) - 2X large devices and up
+ *
+ * All responsive utilities use Tailwind's built-in system for consistency and maintainability.
+ * Custom animations and Lightning effects will work across all breakpoints with proper fallbacks.
+ */

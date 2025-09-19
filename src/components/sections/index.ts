@@ -1,0 +1,6 @@
+export { HeroSection } from './hero-section'
+export { JourneySection } from './journey-section'
+export { SkillsSection } from './skills-section'
+export { ProjectsSection } from './projects-section'
+export { AILabSection } from './ai-lab-section'
+export { ConnectSection } from './connect-section'

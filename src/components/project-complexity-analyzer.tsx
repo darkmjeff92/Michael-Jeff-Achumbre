@@ -10,40 +10,32 @@ import { Badge } from "@/components/ui/badge"
 import { LoadingSpinner } from "@/components/loading-spinner"
 import { HoverScale, FadeIn, SlideIn, LightningPulse, GradientShine } from "@/components/animated-elements"
 
-interface ComplexityAnalysis {
+interface TechnicalAnalysis {
   overallComplexity: 'low' | 'medium' | 'high'
   complexityScore: number
-  estimatedHours: number
-  timelineWeeks: { min: number; max: number }
-  factorAnalysis: {
+  technicalFactors: {
     factor: string
     complexity: 'low' | 'medium' | 'high'
-    impact: string
+    description: string
+    technicalReasoning: string
+  }[]
+  architectureRecommendations: {
+    category: 'frontend' | 'backend' | 'database' | 'deployment'
+    technology: string
     reasoning: string
+    aiEnhancement: string
   }[]
-  riskFactors: {
-    risk: string
-    severity: 'low' | 'medium' | 'high'
-    mitigation: string
+  implementationPhases: {
+    phase: string
+    description: string
+    technologies: string[]
+    aiTools: string[]
   }[]
-  recommendations: {
-    category: 'technical' | 'business' | 'timeline' | 'budget'
-    recommendation: string
-    reasoning: string
-  }[]
-  phaseSuggestion: {
-    recommended: boolean
-    phases: {
-      name: string
-      description: string
-      hours: number
-      deliverables: string[]
-    }[]
-  }
-  aiDevelopmentBenefit: {
-    timeReduction: string
-    qualityImprovement: string
-    specificTools: string[]
+  aiDevelopmentApproach: {
+    toolsUsed: string[]
+    efficiencyGains: string
+    qualityImprovements: string
+    innovativeFeatures: string[]
   }
 }
 
@@ -51,7 +43,7 @@ interface ProjectComplexityAnalyzerProps {
   title?: string
   subtitle?: string
   compact?: boolean
-  onAnalysisComplete?: (analysis: ComplexityAnalysis) => void
+  onAnalysisComplete?: (analysis: TechnicalAnalysis) => void
 }
 
 const projectTypes = [
@@ -68,23 +60,22 @@ const complexityColors = {
 }
 
 const categoryIcons = {
-  technical: '⚙️',
-  business: '💼',
-  timeline: '⏰',
-  budget: '💰'
+  frontend: '🎨',
+  backend: '⚙️',
+  database: '🗄️',
+  deployment: '🚀'
 }
 
 export function ProjectComplexityAnalyzer({
-  title = "Project Complexity Analysis",
-  subtitle = "Get detailed insights into your project's scope, timeline, and requirements",
+  title = "Technical Complexity Analyzer",
+  subtitle = "AI-powered analysis of technical architecture and implementation approach",
   compact = false,
   onAnalysisComplete
 }: ProjectComplexityAnalyzerProps) {
   const [projectType, setProjectType] = useState('website')
   const [projectDescription, setProjectDescription] = useState('')
-  const [requirements, setRequirements] = useState('')
-  const [businessContext, setBusinessContext] = useState('')
-  const [analysis, setAnalysis] = useState<ComplexityAnalysis | null>(null)
+  const [technicalRequirements, setTechnicalRequirements] = useState('')
+  const [analysis, setAnalysis] = useState<TechnicalAnalysis | null>(null)
   const [isPending, startTransition] = useTransition()
 
   const handleAnalyze = () => {
@@ -99,7 +90,7 @@ export function ProjectComplexityAnalyzer({
             projectDescription,
             projectType,
             requirements: requirements.split(',').map(r => r.trim()).filter(Boolean),
-            businessContext
+            technicalRequirements
           })
         })
 
@@ -413,13 +404,13 @@ export function ProjectComplexityAnalyzer({
         {!compact && (
           <div>
             <Label htmlFor="business-context" className="text-lightning-orange font-medium">
-              Business Context (Optional)
+              Technical Constraints & Preferences (Optional)
             </Label>
             <Input
               id="business-context"
-              value={businessContext}
-              onChange={(e) => setBusinessContext(e.target.value)}
-              placeholder="e.g., Small restaurant, Tech startup, Consulting firm"
+              value={technicalRequirements}
+              onChange={(e) => setTechnicalRequirements(e.target.value)}
+              placeholder="e.g., Must use React, needs mobile-first, requires real-time features"
               className="mt-2"
             />
           </div>
