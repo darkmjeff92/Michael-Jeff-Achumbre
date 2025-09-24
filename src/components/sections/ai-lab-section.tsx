@@ -1,221 +1,388 @@
-"use client"
+'use client'
 
-import { Suspense, lazy } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { SectionLoading } from "@/components/loading-spinner"
-
-// Dynamic imports for heavy components
-const DataFlow = lazy(() => import("@/components/backgrounds/data-flow").then(module => ({ default: module.DataFlow })))
-const ProjectComplexityAnalyzer = lazy(() => import("@/components/project-complexity-analyzer").then(module => ({ default: module.ProjectComplexityAnalyzer })))
-const RAGDocumentDemo = lazy(() => import("@/components/rag-document-demo").then(module => ({ default: module.RAGDocumentDemo })))
-const AIShowcaseSection = lazy(() => import("@/components/ai-showcase-section").then(module => ({ default: module.AIShowcaseSection })))
 import {
   FadeIn,
   SlideIn,
-  HoverScale,
-  Floating,
   StaggerContainer,
   StaggerItem,
-  ScrollReveal,
-  GradientShine
+  CircularLightningPulseAlwaysOn,
+  InViewLightningPulse
 } from "@/components/animated-elements"
+import { AIAgentChatTab } from "@/components/ai-labs/ai-agent-chat-tab"
+import { DocumentRAGTab } from "@/components/ai-labs/document-rag-tab"
+import { AnalyticsDashboardTab } from "@/components/ai-labs/analytics-dashboard-tab"
+import { ArchitectureTab } from "@/components/ai-labs/architecture-tab"
 
-export function AILabSection() {
-  const aiFeatures = [
-    {
-      title: "RAG System Demo",
-      subtitle: "Ask My AI Anything",
-      icon: "🔍",
-      description: "Upload documents (PDF, DOCX, TXT) and ask questions about the content",
-      technology: "RAG (Retrieval-Augmented Generation) with vector embeddings and semantic search",
-      privacy: "Documents processed temporarily and deleted after session",
-      tryText: "Upload a document and ask: 'What are the key points?' or 'Summarize this for me'",
-      proves: "Advanced AI integration, document processing, and practical problem-solving"
-    },
-    {
-      title: "Complexity Analyzer",
-      subtitle: "Project Estimation Intelligence",
-      icon: "⚡",
-      description: "Analyzes project descriptions and provides intelligent complexity assessments",
-      technology: "AI-powered effort estimation, risk analysis, technology recommendations",
-      privacy: "All analysis done locally with secure processing",
-      tryText: "Describe any software project and get instant intelligent analysis",
-      proves: "Business-focused AI applications that solve real problems"
-    },
-    {
-      title: "AI Code Assistant",
-      subtitle: "Watch AI Help Me Code",
-      icon: "🤖",
-      description: "Live demonstration of AI-assisted development workflow",
-      technology: "Integration with Claude Code CLI and Cursor IDE workflow",
-      privacy: "Code generation happens in real-time with full transparency",
-      tryText: "Request a specific component or function and watch AI help build it",
-      proves: "Cutting-edge development workflow and AI-enhanced productivity"
-    },
-    {
-      title: "Intelligent Contact",
-      subtitle: "Smart Form That Adapts",
-      icon: "💬",
-      description: "Contact form that intelligently adapts based on your project type",
-      technology: "Dynamic questions, requirement gathering, automatic project classification",
-      privacy: "Form data processed securely with intelligent response generation",
-      tryText: "Start describing a project and watch the form become smarter",
-      proves: "User experience enhancement through thoughtful AI integration"
-    }
+interface AILabsHeroProps {
+  onDemoComplete: () => void
+}
+
+function AILabsHero({ onDemoComplete }: AILabsHeroProps) {
+  const [demoStep, setDemoStep] = useState(0)
+  const [isRunning, setIsRunning] = useState(false)
+  const shouldReduceMotion = useReducedMotion()
+
+  const demoSteps = [
+    "Initializing AI systems...",
+    "Loading neural networks...",
+    "Connecting to knowledge base...",
+    "RAG system ready...",
+    "AI Lab activated! ⚡"
+  ]
+
+  const startDemo = () => {
+    if (isRunning) return
+    setIsRunning(true)
+    setDemoStep(0)
+
+    const stepDuration = shouldReduceMotion ? 400 : 800
+
+    demoSteps.forEach((_, index) => {
+      setTimeout(() => {
+        setDemoStep(index + 1)
+        if (index === demoSteps.length - 1) {
+          setTimeout(() => {
+            setIsRunning(false)
+            onDemoComplete()
+          }, stepDuration)
+        }
+      }, index * stepDuration)
+    })
+  }
+
+  return (
+    <div className="text-center space-y-8 mb-16">
+      <FadeIn>
+        <div className="space-y-4">
+          <CircularLightningPulseAlwaysOn intensity="medium" className="inline-block">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-lightning-gradient">
+              AI Laboratory
+            </h2>
+          </CircularLightningPulseAlwaysOn>
+
+          <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            Experience advanced AI capabilities through interactive demonstrations.
+            From intelligent document analysis to real-time AI conversations.
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-2 mt-6">
+            <Badge variant="outline" className="border-lightning-yellow text-lightning-yellow">
+              GPT-5-nano Powered
+            </Badge>
+            <Badge variant="outline" className="border-lightning-orange text-lightning-orange">
+              Real RAG System
+            </Badge>
+            <Badge variant="outline" className="border-lightning-yellow text-lightning-yellow">
+              Live Analytics
+            </Badge>
+            <Badge variant="outline" className="border-lightning-orange text-lightning-orange">
+              Vector Database
+            </Badge>
+          </div>
+        </div>
+      </FadeIn>
+
+      <SlideIn direction="up" delay={0.3}>
+        <Card className="bg-lightning-dark/30 border-lightning-gray max-w-2xl mx-auto">
+          <CardContent className="p-8">
+            <div className="space-y-6">
+              <h3 className="text-lightning-yellow text-xl font-semibold">
+                5-Second System Demo
+              </h3>
+
+              <div className="space-y-4">
+                <div
+                  onClick={startDemo}
+                  className={`
+                    p-6 rounded-lg border-2 cursor-pointer transition-all duration-300
+                    ${isRunning
+                      ? 'border-lightning-yellow bg-lightning-yellow/10'
+                      : 'border-lightning-gray hover:border-lightning-yellow/50 bg-lightning-black/30'
+                    }
+                  `}
+                >
+                  {isRunning ? (
+                    <div className="flex items-center justify-center gap-3">
+                      <InViewLightningPulse>
+                        <div className="w-4 h-4 bg-lightning-yellow rounded-full animate-pulse" />
+                      </InViewLightningPulse>
+                      <span className="text-lightning-yellow font-medium">
+                        {demoStep > 0 && demoStep <= demoSteps.length
+                          ? demoSteps[demoStep - 1]
+                          : 'Initializing...'}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="text-center">
+                      <div className="text-2xl mb-2">⚡</div>
+                      <p className="text-lightning-yellow font-medium">
+                        Click to Start AI Demo
+                      </p>
+                      <p className="text-gray-400 text-sm mt-1">
+                        Quick preview of AI capabilities
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {!isRunning && (
+                  <p className="text-gray-500 text-sm">
+                    Experience the power of modern AI systems in just 5 seconds
+                  </p>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </SlideIn>
+    </div>
+  )
+}
+
+interface AIPlaygroundTabsProps {
+  activeTab: string
+  onTabChange: (tab: string) => void
+}
+
+function AIPlaygroundTabs({ activeTab, onTabChange }: AIPlaygroundTabsProps) {
+  const tabs = [
+    { id: 'agent', label: 'AI Agent', icon: '🤖', description: 'Advanced AI conversations' },
+    { id: 'documents', label: 'RAG System', icon: '📚', description: 'Document intelligence' },
+    { id: 'analytics', label: 'Analytics', icon: '📊', description: 'Live system metrics' },
+    { id: 'architecture', label: 'Architecture', icon: '⚙️', description: 'Technical details' }
   ]
 
   return (
-    <section id="ai-lab" className="relative py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16 bg-lightning-dark/30 overflow-hidden">
-      {/* Data Flow Background Animation */}
-      <Suspense fallback={<div className="absolute inset-0 bg-lightning-dark/30" />}>
-        <DataFlow intensity="high" />
-      </Suspense>
-
-      <div className="relative z-10 container mx-auto max-w-6xl xl:max-w-7xl 2xl:max-w-8xl">
-        <ScrollReveal>
-          <div className="text-center mb-12 lg:mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-impact text-lightning-gradient mb-4">
-              Intelligence Playground
-            </h2>
-            <p className="text-lg md:text-xl text-gray-300 max-w-4xl mx-auto">
-              Don't just read about my AI skills - experience them directly. These live demos showcase practical
-              AI implementations you can interact with right now.
-            </p>
+    <div className="mb-8">
+      {/* Mobile Tab Navigation - Swipeable */}
+      <div className="md:hidden">
+        <div className="flex overflow-x-auto pb-2 mb-4 scrollbar-hide">
+          <div className="flex gap-2 px-4 min-w-max">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => onTabChange(tab.id)}
+                className={`
+                  flex flex-col items-center gap-1 p-3 rounded-lg whitespace-nowrap min-w-[80px]
+                  transition-all duration-300 text-sm font-medium
+                  ${activeTab === tab.id
+                    ? 'bg-lightning-gradient text-lightning-black'
+                    : 'bg-lightning-gray/30 text-gray-300 hover:bg-lightning-gray/50'
+                  }
+                `}
+                style={{ minHeight: '48px' }}
+              >
+                <span className="text-lg">{tab.icon}</span>
+                <span className="text-xs">{tab.label}</span>
+              </button>
+            ))}
           </div>
-        </ScrollReveal>
-
-        {/* Interactive AI Features Grid */}
-        <StaggerContainer staggerDelay={0.2} className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 mb-16">
-          {aiFeatures.map((feature, index) => (
-            <StaggerItem key={index}>
-              <HoverScale scale={1.02}>
-                <Card className="h-full bg-lightning-gray/50 border-lightning-gray hover:border-lightning-yellow/50 transition-all duration-300">
-                  <CardHeader className="pb-4">
-                    <div className="flex items-center gap-3 mb-2">
-                      <Floating intensity={6} duration={3 + index * 0.5}>
-                        <div className="text-3xl sm:text-4xl">{feature.icon}</div>
-                      </Floating>
-                      <div>
-                        <CardTitle className="text-lightning-yellow text-lg sm:text-xl">
-                          {feature.title}
-                        </CardTitle>
-                        <CardDescription className="text-lightning-orange text-sm font-medium">
-                          {feature.subtitle}
-                        </CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-
-                  <CardContent className="space-y-4">
-                    <p className="text-gray-300 text-sm leading-relaxed">
-                      <strong>What It Does:</strong> {feature.description}
-                    </p>
-
-                    <p className="text-gray-300 text-sm leading-relaxed">
-                      <strong>Technology:</strong> {feature.technology}
-                    </p>
-
-                    <p className="text-gray-300 text-sm leading-relaxed">
-                      <strong>Privacy:</strong> {feature.privacy}
-                    </p>
-
-                    <p className="text-gray-300 text-sm leading-relaxed">
-                      <strong>Try It:</strong> {feature.tryText}
-                    </p>
-
-                    <div className="pt-2">
-                      <Badge variant="outline" className="border-lightning-yellow text-lightning-yellow text-xs">
-                        {feature.proves}
-                      </Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-              </HoverScale>
-            </StaggerItem>
-          ))}
-        </StaggerContainer>
-
-        {/* Live AI Demos */}
-        <div className="space-y-12 lg:space-y-16">
-          {/* Project Complexity Analyzer */}
-          <ScrollReveal>
-            <div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-lightning-yellow mb-6 text-center">
-                ⚡ Live Demo: Project Complexity Analyzer
-              </h3>
-              <Suspense fallback={<SectionLoading />}>
-                <ProjectComplexityAnalyzer />
-              </Suspense>
-            </div>
-          </ScrollReveal>
-
-          {/* RAG Document Analysis Demo */}
-          <ScrollReveal>
-            <div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-lightning-yellow mb-6 text-center">
-                🔍 Live Demo: RAG Document Analysis
-              </h3>
-              <Suspense fallback={<SectionLoading />}>
-                <RAGDocumentDemo />
-              </Suspense>
-            </div>
-          </ScrollReveal>
-
-          {/* AI Showcase Features */}
-          <ScrollReveal>
-            <div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-lightning-yellow mb-6 text-center">
-                🔍 Additional AI Features
-              </h3>
-              <Suspense fallback={<SectionLoading />}>
-                <AIShowcaseSection />
-              </Suspense>
-            </div>
-          </ScrollReveal>
         </div>
 
-        {/* Privacy & Data Handling */}
-        <ScrollReveal>
-          <div className="mt-16 lg:mt-20">
-            <GradientShine>
-              <Card className="bg-lightning-gradient/10 border-lightning-yellow">
-                <CardHeader>
-                  <CardTitle className="text-lightning-yellow text-xl sm:text-2xl text-center flex items-center justify-center gap-2">
-                    <span>🔒</span>
-                    Privacy & Data Handling
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <h4 className="text-lightning-yellow font-semibold mb-3">Data Security</h4>
-                      <ul className="text-gray-300 space-y-2 text-sm">
-                        <li>• <strong>Document Uploads:</strong> Processed temporarily, automatically deleted after session ends</li>
-                        <li>• <strong>Conversations:</strong> AI interactions stored locally, not sent to external servers unnecessarily</li>
-                        <li>• <strong>Privacy First:</strong> No sensitive data is permanently stored or shared</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="text-lightning-yellow font-semibold mb-3">Demo Purpose</h4>
-                      <ul className="text-gray-300 space-y-2 text-sm">
-                        <li>• <strong>Skill Demonstration:</strong> These tools primarily showcase AI development capabilities</li>
-                        <li>• <strong>Safe Testing:</strong> Don't upload sensitive business information</li>
-                        <li>• <strong>Full Functionality:</strong> While demos, all features work as production-ready applications</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="mt-6 text-center">
-                    <p className="text-gray-400 italic">
-                      <strong>Disclaimer:</strong> While fully functional, these tools are primarily for showcasing
-                      AI development capabilities and should not be used for sensitive business data.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </GradientShine>
+        {/* Mobile Tab Indicators */}
+        <div className="flex justify-center gap-2 mb-6">
+          {tabs.map((tab) => (
+            <div
+              key={tab.id}
+              className={`
+                w-2 h-2 rounded-full transition-all duration-300
+                ${activeTab === tab.id ? 'bg-lightning-yellow' : 'bg-lightning-gray'}
+              `}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop Tab Navigation - Hover Effects */}
+      <div className="hidden md:block">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {tabs.map((tab) => (
+            <motion.button
+              key={tab.id}
+              onClick={() => onTabChange(tab.id)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className={`
+                p-4 rounded-lg border-2 text-left transition-all duration-300
+                ${activeTab === tab.id
+                  ? 'border-lightning-yellow bg-lightning-yellow/10'
+                  : 'border-lightning-gray bg-lightning-gray/20 hover:border-lightning-yellow/50'
+                }
+              `}
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-2xl">{tab.icon}</span>
+                <h3 className={`font-semibold ${
+                  activeTab === tab.id ? 'text-lightning-yellow' : 'text-white'
+                }`}>
+                  {tab.label}
+                </h3>
+              </div>
+              <p className="text-gray-400 text-sm">{tab.description}</p>
+            </motion.button>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function TabContent({ tabId }: { tabId: string }) {
+  // Return actual components for each tab
+  switch (tabId) {
+    case 'agent':
+      return <AIAgentChatTab />
+
+    case 'documents':
+      return <DocumentRAGTab />
+
+    case 'analytics':
+      return <AnalyticsDashboardTab />
+
+    case 'architecture':
+      return <ArchitectureTab />
+
+    default:
+      return <PlaceholderTabContent tabId={tabId} />
+  }
+}
+
+function PlaceholderTabContent({ tabId }: { tabId: string }) {
+  const content = {
+    documents: {
+      title: "RAG Document System",
+      description: "Real document processing with Supabase pgvector",
+      features: ["Document upload", "Vector embeddings", "Semantic search"]
+    },
+    analytics: {
+      title: "Live Analytics Dashboard",
+      description: "Real-time metrics from your AI interactions",
+      features: ["Usage tracking", "Response times", "System performance"]
+    },
+    architecture: {
+      title: "Technical Architecture",
+      description: "Deep dive into the AI system implementation",
+      features: ["System components", "Data flow", "Infrastructure"]
+    }
+  }
+
+  const tab = content[tabId as keyof typeof content]
+
+  return (
+    <Card className="bg-lightning-gray/30 border-lightning-gray min-h-[400px]">
+      <CardHeader>
+        <CardTitle className="text-lightning-yellow text-xl">
+          {tab.title}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-6">
+          <p className="text-gray-300">{tab.description}</p>
+
+          <div>
+            <h4 className="text-lightning-orange font-medium mb-3">Key Features:</h4>
+            <ul className="space-y-2">
+              {tab.features.map((feature, index) => (
+                <li key={index} className="flex items-center gap-2 text-gray-300">
+                  <span className="text-lightning-yellow">•</span>
+                  {feature}
+                </li>
+              ))}
+            </ul>
           </div>
-        </ScrollReveal>
+
+          <div className="mt-8 p-4 bg-lightning-black/50 rounded-lg border border-lightning-gray">
+            <p className="text-lightning-orange text-sm font-medium mb-2">🚧 Under Construction</p>
+            <p className="text-gray-400 text-sm">
+              This {tab.title.toLowerCase()} will be implemented in the next development phase.
+              The component structure and integrations are ready.
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+export function AILabSection() {
+  const [demoCompleted, setDemoCompleted] = useState(false)
+  const [activeTab, setActiveTab] = useState('agent')
+
+  return (
+    <section id="ai-lab" className="relative py-16 sm:py-20 lg:py-24">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* Hero Section */}
+        <AILabsHero onDemoComplete={() => setDemoCompleted(true)} />
+
+        {/* Main Content */}
+        <StaggerContainer className="space-y-8">
+
+          {/* AI Playground */}
+          <StaggerItem>
+            <Card className="bg-lightning-dark/20 border-lightning-gray/50">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lightning-yellow text-2xl sm:text-3xl flex items-center gap-3">
+                    <CircularLightningPulseAlwaysOn intensity="low" className="inline-block">
+                      <span>⚡</span>
+                    </CircularLightningPulseAlwaysOn>
+                    AI Playground
+                  </CardTitle>
+
+                  {demoCompleted && (
+                    <Badge className="bg-lightning-gradient text-lightning-black font-semibold">
+                      Systems Online
+                    </Badge>
+                  )}
+                </div>
+              </CardHeader>
+
+              <CardContent className="p-6">
+                {/* Tab Navigation */}
+                <AIPlaygroundTabs
+                  activeTab={activeTab}
+                  onTabChange={setActiveTab}
+                />
+
+                {/* Tab Content */}
+                <div className="relative">
+                  <SlideIn key={activeTab} direction="up" duration={0.3}>
+                    <TabContent tabId={activeTab} />
+                  </SlideIn>
+                </div>
+              </CardContent>
+            </Card>
+          </StaggerItem>
+
+          {/* Professional CTA */}
+          <StaggerItem>
+            <Card className="bg-lightning-gradient/10 border-lightning-yellow text-center">
+              <CardContent className="p-8">
+                <h3 className="text-lightning-yellow text-xl font-semibold mb-3">
+                  Ready to Build Something Amazing?
+                </h3>
+                <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
+                  These AI capabilities showcase what&apos;s possible with modern technology.
+                  Let&apos;s discuss how we can implement similar solutions for your project.
+                </p>
+                <motion.a
+                  href="#connect"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="inline-flex items-center gap-2 bg-lightning-gradient text-lightning-black font-semibold px-6 py-3 rounded-lg hover:shadow-lg transition-all duration-300"
+                >
+                  Let&apos;s Connect ⚡
+                </motion.a>
+              </CardContent>
+            </Card>
+          </StaggerItem>
+
+        </StaggerContainer>
       </div>
     </section>
   )
