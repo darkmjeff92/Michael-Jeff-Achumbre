@@ -17,9 +17,20 @@
       "Bash(dir:*)",
       "WebFetch(domain:linear.app)",
       "WebFetch(domain:framer.com)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "mcp__supabase__list_extensions",
+      "mcp__supabase__apply_migration",
+      "mcp__supabase__execute_sql",
+      "mcp__supabase__list_tables",
+      "Bash(mv:*)",
+      "Bash(rm:*)",
+      "Bash(npm run pre-build:*)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "supabase"
+  ]
 }

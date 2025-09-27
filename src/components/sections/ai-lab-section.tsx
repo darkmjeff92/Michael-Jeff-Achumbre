@@ -1,388 +1,343 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, useReducedMotion } from 'motion/react'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { useState, useRef, useCallback, useMemo } from 'react'
+import { motion } from 'motion/react'
 import {
   FadeIn,
-  SlideIn,
-  StaggerContainer,
-  StaggerItem,
-  CircularLightningPulseAlwaysOn,
-  InViewLightningPulse
+  CircularLightningPulseAlwaysOn
 } from "@/components/animated-elements"
-import { AIAgentChatTab } from "@/components/ai-labs/ai-agent-chat-tab"
-import { DocumentRAGTab } from "@/components/ai-labs/document-rag-tab"
-import { AnalyticsDashboardTab } from "@/components/ai-labs/analytics-dashboard-tab"
-import { ArchitectureTab } from "@/components/ai-labs/architecture-tab"
+import { AIAssistantTab } from "@/components/ai-labs/ai-assistant-tab"
+import { RAGDemoTab } from "@/components/ai-labs/rag-demo-tab"
+import { AnalyticsTab } from "@/components/ai-labs/analytics-tab"
 
-interface AILabsHeroProps {
-  onDemoComplete: () => void
-}
-
-function AILabsHero({ onDemoComplete }: AILabsHeroProps) {
-  const [demoStep, setDemoStep] = useState(0)
-  const [isRunning, setIsRunning] = useState(false)
-  const shouldReduceMotion = useReducedMotion()
-
-  const demoSteps = [
-    "Initializing AI systems...",
-    "Loading neural networks...",
-    "Connecting to knowledge base...",
-    "RAG system ready...",
-    "AI Lab activated! ⚡"
-  ]
-
-  const startDemo = () => {
-    if (isRunning) return
-    setIsRunning(true)
-    setDemoStep(0)
-
-    const stepDuration = shouldReduceMotion ? 400 : 800
-
-    demoSteps.forEach((_, index) => {
-      setTimeout(() => {
-        setDemoStep(index + 1)
-        if (index === demoSteps.length - 1) {
-          setTimeout(() => {
-            setIsRunning(false)
-            onDemoComplete()
-          }, stepDuration)
-        }
-      }, index * stepDuration)
-    })
-  }
-
+function AILabsHero() {
   return (
-    <div className="text-center space-y-8 mb-16">
+    <div className="relative text-center space-y-6 mb-12">
+      {/* Gradient Mesh Background */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute top-0 left-1/4 w-64 h-64 bg-lightning-yellow/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-10 right-1/4 w-48 h-48 bg-lightning-orange/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute -top-5 left-1/2 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+      </div>
+
+      {/* Floating Lightning Particles */}
+      <div className="absolute inset-0 -z-5 overflow-hidden">
+        <div className="absolute top-1/4 left-1/6 text-lightning-yellow/20 text-xs animate-float">⚡</div>
+        <div className="absolute top-3/4 right-1/6 text-lightning-orange/20 text-sm animate-float-delayed">⚡</div>
+        <div className="absolute top-1/2 left-3/4 text-lightning-yellow/15 text-xs animate-float-slow">⚡</div>
+      </div>
+
       <FadeIn>
-        <div className="space-y-4">
+        <div className="relative">
           <CircularLightningPulseAlwaysOn intensity="medium" className="inline-block">
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-lightning-gradient">
-              AI Laboratory
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-lightning-gradient mb-2">
+              AI Labz Playground
             </h2>
           </CircularLightningPulseAlwaysOn>
 
-          <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-            Experience advanced AI capabilities through interactive demonstrations.
-            From intelligent document analysis to real-time AI conversations.
-          </p>
-
-          <div className="flex flex-wrap justify-center gap-2 mt-6">
-            <Badge variant="outline" className="border-lightning-yellow text-lightning-yellow">
-              GPT-5-nano Powered
-            </Badge>
-            <Badge variant="outline" className="border-lightning-orange text-lightning-orange">
-              Real RAG System
-            </Badge>
-            <Badge variant="outline" className="border-lightning-yellow text-lightning-yellow">
-              Live Analytics
-            </Badge>
-            <Badge variant="outline" className="border-lightning-orange text-lightning-orange">
-              Vector Database
-            </Badge>
+          {/* Lightning accent line */}
+          <div className="flex items-center justify-center mt-4 mb-6">
+            <div className="h-px w-16 bg-gradient-to-r from-transparent to-lightning-yellow/50"></div>
+            <div className="mx-3 text-lightning-yellow text-lg">⚡</div>
+            <div className="h-px w-16 bg-gradient-to-l from-transparent to-lightning-yellow/50"></div>
           </div>
+
+          <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
+            Interactive AI demonstrations
+          </p>
+          <p className="text-sm text-gray-500 max-w-lg mx-auto mt-2">
+            Explore cutting-edge AI capabilities through live, hands-on experiences
+          </p>
         </div>
       </FadeIn>
-
-      <SlideIn direction="up" delay={0.3}>
-        <Card className="bg-lightning-dark/30 border-lightning-gray max-w-2xl mx-auto">
-          <CardContent className="p-8">
-            <div className="space-y-6">
-              <h3 className="text-lightning-yellow text-xl font-semibold">
-                5-Second System Demo
-              </h3>
-
-              <div className="space-y-4">
-                <div
-                  onClick={startDemo}
-                  className={`
-                    p-6 rounded-lg border-2 cursor-pointer transition-all duration-300
-                    ${isRunning
-                      ? 'border-lightning-yellow bg-lightning-yellow/10'
-                      : 'border-lightning-gray hover:border-lightning-yellow/50 bg-lightning-black/30'
-                    }
-                  `}
-                >
-                  {isRunning ? (
-                    <div className="flex items-center justify-center gap-3">
-                      <InViewLightningPulse>
-                        <div className="w-4 h-4 bg-lightning-yellow rounded-full animate-pulse" />
-                      </InViewLightningPulse>
-                      <span className="text-lightning-yellow font-medium">
-                        {demoStep > 0 && demoStep <= demoSteps.length
-                          ? demoSteps[demoStep - 1]
-                          : 'Initializing...'}
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="text-center">
-                      <div className="text-2xl mb-2">⚡</div>
-                      <p className="text-lightning-yellow font-medium">
-                        Click to Start AI Demo
-                      </p>
-                      <p className="text-gray-400 text-sm mt-1">
-                        Quick preview of AI capabilities
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {!isRunning && (
-                  <p className="text-gray-500 text-sm">
-                    Experience the power of modern AI systems in just 5 seconds
-                  </p>
-                )}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </SlideIn>
     </div>
   )
 }
 
-interface AIPlaygroundTabsProps {
-  activeTab: string
-  onTabChange: (tab: string) => void
-}
-
-function AIPlaygroundTabs({ activeTab, onTabChange }: AIPlaygroundTabsProps) {
+// Enhanced Linear.app-inspired Tab Navigation
+function TabNavigation({ activeTab, onTabChange }: {
+  activeTab: 'assistant' | 'rag' | 'analytics'
+  onTabChange: (tab: 'assistant' | 'rag' | 'analytics') => void
+}) {
   const tabs = [
-    { id: 'agent', label: 'AI Agent', icon: '🤖', description: 'Advanced AI conversations' },
-    { id: 'documents', label: 'RAG System', icon: '📚', description: 'Document intelligence' },
-    { id: 'analytics', label: 'Analytics', icon: '📊', description: 'Live system metrics' },
-    { id: 'architecture', label: 'Architecture', icon: '⚙️', description: 'Technical details' }
-  ]
+    { id: 'assistant', label: 'AI Assistant', icon: '🤖', gradient: 'from-blue-500 to-cyan-400', accent: 'text-blue-400' },
+    { id: 'rag', label: 'RAG Demo', icon: '📚', gradient: 'from-green-500 to-emerald-400', accent: 'text-green-400' },
+    { id: 'analytics', label: 'Analytics', icon: '📊', gradient: 'from-purple-500 to-pink-400', accent: 'text-purple-400' }
+  ] as const
 
-  return (
-    <div className="mb-8">
-      {/* Mobile Tab Navigation - Swipeable */}
-      <div className="md:hidden">
-        <div className="flex overflow-x-auto pb-2 mb-4 scrollbar-hide">
-          <div className="flex gap-2 px-4 min-w-max">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => onTabChange(tab.id)}
-                className={`
-                  flex flex-col items-center gap-1 p-3 rounded-lg whitespace-nowrap min-w-[80px]
-                  transition-all duration-300 text-sm font-medium
-                  ${activeTab === tab.id
-                    ? 'bg-lightning-gradient text-lightning-black'
-                    : 'bg-lightning-gray/30 text-gray-300 hover:bg-lightning-gray/50'
-                  }
-                `}
-                style={{ minHeight: '48px' }}
-              >
-                <span className="text-lg">{tab.icon}</span>
-                <span className="text-xs">{tab.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
+  const activeTabIndex = tabs.findIndex(tab => tab.id === activeTab)
 
-        {/* Mobile Tab Indicators */}
-        <div className="flex justify-center gap-2 mb-6">
-          {tabs.map((tab) => (
-            <div
-              key={tab.id}
-              className={`
-                w-2 h-2 rounded-full transition-all duration-300
-                ${activeTab === tab.id ? 'bg-lightning-yellow' : 'bg-lightning-gray'}
-              `}
-            />
-          ))}
-        </div>
-      </div>
+  // Keyboard navigation handler
+  const handleKeyDown = (e: React.KeyboardEvent, currentTabId: string) => {
+    const currentIndex = tabs.findIndex(tab => tab.id === currentTabId)
 
-      {/* Desktop Tab Navigation - Hover Effects */}
-      <div className="hidden md:block">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {tabs.map((tab) => (
-            <motion.button
-              key={tab.id}
-              onClick={() => onTabChange(tab.id)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className={`
-                p-4 rounded-lg border-2 text-left transition-all duration-300
-                ${activeTab === tab.id
-                  ? 'border-lightning-yellow bg-lightning-yellow/10'
-                  : 'border-lightning-gray bg-lightning-gray/20 hover:border-lightning-yellow/50'
-                }
-              `}
-            >
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-2xl">{tab.icon}</span>
-                <h3 className={`font-semibold ${
-                  activeTab === tab.id ? 'text-lightning-yellow' : 'text-white'
-                }`}>
-                  {tab.label}
-                </h3>
-              </div>
-              <p className="text-gray-400 text-sm">{tab.description}</p>
-            </motion.button>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function TabContent({ tabId }: { tabId: string }) {
-  // Return actual components for each tab
-  switch (tabId) {
-    case 'agent':
-      return <AIAgentChatTab />
-
-    case 'documents':
-      return <DocumentRAGTab />
-
-    case 'analytics':
-      return <AnalyticsDashboardTab />
-
-    case 'architecture':
-      return <ArchitectureTab />
-
-    default:
-      return <PlaceholderTabContent tabId={tabId} />
-  }
-}
-
-function PlaceholderTabContent({ tabId }: { tabId: string }) {
-  const content = {
-    documents: {
-      title: "RAG Document System",
-      description: "Real document processing with Supabase pgvector",
-      features: ["Document upload", "Vector embeddings", "Semantic search"]
-    },
-    analytics: {
-      title: "Live Analytics Dashboard",
-      description: "Real-time metrics from your AI interactions",
-      features: ["Usage tracking", "Response times", "System performance"]
-    },
-    architecture: {
-      title: "Technical Architecture",
-      description: "Deep dive into the AI system implementation",
-      features: ["System components", "Data flow", "Infrastructure"]
+    switch (e.key) {
+      case 'ArrowLeft':
+        e.preventDefault()
+        const prevIndex = currentIndex > 0 ? currentIndex - 1 : tabs.length - 1
+        onTabChange(tabs[prevIndex].id as 'assistant' | 'rag' | 'analytics')
+        break
+      case 'ArrowRight':
+        e.preventDefault()
+        const nextIndex = currentIndex < tabs.length - 1 ? currentIndex + 1 : 0
+        onTabChange(tabs[nextIndex].id as 'assistant' | 'rag' | 'analytics')
+        break
+      case 'Home':
+        e.preventDefault()
+        onTabChange(tabs[0].id as 'assistant' | 'rag' | 'analytics')
+        break
+      case 'End':
+        e.preventDefault()
+        onTabChange(tabs[tabs.length - 1].id as 'assistant' | 'rag' | 'analytics')
+        break
     }
   }
 
-  const tab = content[tabId as keyof typeof content]
-
   return (
-    <Card className="bg-lightning-gray/30 border-lightning-gray min-h-[400px]">
-      <CardHeader>
-        <CardTitle className="text-lightning-yellow text-xl">
-          {tab.title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-6">
-          <p className="text-gray-300">{tab.description}</p>
+    <div className="relative mb-12">
+      {/* Enhanced Glass container for tabs */}
+      <div className="relative backdrop-blur-2xl bg-lightning-black/40 border border-lightning-gray/20 rounded-3xl p-3 overflow-hidden shadow-2xl">
 
-          <div>
-            <h4 className="text-lightning-orange font-medium mb-3">Key Features:</h4>
-            <ul className="space-y-2">
-              {tab.features.map((feature, index) => (
-                <li key={index} className="flex items-center gap-2 text-gray-300">
-                  <span className="text-lightning-yellow">•</span>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-          </div>
+        {/* Dynamic background glow based on active tab */}
+        <div className="absolute inset-0 bg-gradient-to-r from-lightning-yellow/3 via-transparent to-lightning-orange/3 opacity-70"></div>
 
-          <div className="mt-8 p-4 bg-lightning-black/50 rounded-lg border border-lightning-gray">
-            <p className="text-lightning-orange text-sm font-medium mb-2">🚧 Under Construction</p>
-            <p className="text-gray-400 text-sm">
-              This {tab.title.toLowerCase()} will be implemented in the next development phase.
-              The component structure and integrations are ready.
-            </p>
-          </div>
+        {/* Animated active tab background */}
+        <motion.div
+          className="absolute top-3 bottom-3 bg-gradient-to-r from-lightning-yellow/10 to-lightning-orange/10 rounded-2xl shadow-lg backdrop-blur-sm"
+          initial={false}
+          animate={{
+            left: `${(activeTabIndex / tabs.length) * 100}%`,
+            width: `${100 / tabs.length}%`,
+          }}
+          transition={{ type: "spring", bounce: 0.25, duration: 0.8 }}
+        />
+
+        {/* Tab Bar */}
+        <div className="relative flex" role="tablist" aria-label="AI Labs Navigation">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                role="tab"
+                tabIndex={isActive ? 0 : -1}
+                aria-selected={isActive}
+                aria-controls={`${tab.id}-panel`}
+                id={`${tab.id}-tab`}
+                onClick={() => onTabChange(tab.id)}
+                onKeyDown={(e) => handleKeyDown(e, tab.id)}
+                className={`
+                  relative flex-1 flex items-center justify-center gap-3 px-4 sm:px-6 py-4 text-sm font-semibold transition-all duration-500
+                  whitespace-nowrap touch-target-md rounded-2xl group focus:outline-none focus:ring-2 focus:ring-lightning-yellow/50 focus:ring-offset-2 focus:ring-offset-transparent
+                  ${isActive
+                    ? 'text-white'
+                    : 'text-gray-400 hover:text-gray-200'
+                  }
+                `}
+              >
+
+                {/* Icon with enhanced scaling */}
+                <motion.span
+                  className="relative z-10 text-xl sm:text-2xl"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  {tab.icon}
+                </motion.span>
+
+                {/* Label with better typography */}
+                <span className={`relative z-10 hidden sm:inline font-bold text-sm tracking-wide ${isActive ? 'text-lightning-yellow' : ''}`}>
+                  {tab.label}
+                </span>
+                <span className={`relative z-10 sm:hidden font-bold text-xs tracking-wide ${isActive ? 'text-lightning-yellow' : ''}`}>
+                  {tab.label.split(' ')[0]}
+                </span>
+
+                {/* Enhanced hover glow effect */}
+                <div className={`
+                  absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-20 transition-opacity duration-500
+                  bg-gradient-to-r ${tab.gradient}
+                `} />
+
+                {/* Subtle pulse for active tab */}
+                {isActive && (
+                  <motion.div
+                    className="absolute inset-0 rounded-2xl bg-lightning-yellow/5"
+                    animate={{ opacity: [0.5, 0.8, 0.5] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                )}
+              </button>
+            )
+          })}
         </div>
-      </CardContent>
-    </Card>
+
+
+        {/* Corner lightning accents */}
+        <div className="absolute top-2 left-2 w-3 h-3 border-l-2 border-t-2 border-lightning-yellow/20 rounded-tl-lg"></div>
+        <div className="absolute top-2 right-2 w-3 h-3 border-r-2 border-t-2 border-lightning-orange/20 rounded-tr-lg"></div>
+      </div>
+
+      {/* Enhanced connection line to content */}
+      <motion.div
+        initial={{ scaleY: 0, opacity: 0 }}
+        animate={{ scaleY: 1, opacity: 1 }}
+        transition={{ delay: 0.4, duration: 0.6 }}
+        className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0.5 h-8 bg-gradient-to-b from-lightning-yellow via-lightning-orange to-transparent rounded-full"
+        style={{ boxShadow: '0 0 6px rgba(255, 215, 0, 0.4)' }}
+      />
+    </div>
   )
 }
 
+
+
 export function AILabSection() {
-  const [demoCompleted, setDemoCompleted] = useState(false)
-  const [activeTab, setActiveTab] = useState('agent')
+  const [activeTab, setActiveTab] = useState<'assistant' | 'rag' | 'analytics'>('assistant')
+  const touchStartX = useRef<number | null>(null)
+  const touchStartY = useRef<number | null>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  const tabs = useMemo<Array<'assistant' | 'rag' | 'analytics'>>(() => ['assistant', 'rag', 'analytics'], [])
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+    touchStartY.current = e.touches[0].clientY
+  }, [])
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (!touchStartX.current || !touchStartY.current) return
+
+    const touchEndX = e.changedTouches[0].clientX
+    const touchEndY = e.changedTouches[0].clientY
+
+    const deltaX = touchStartX.current - touchEndX
+    const deltaY = touchStartY.current - touchEndY
+
+    // Only handle horizontal swipes (ignore vertical scrolling)
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+      const currentIndex = tabs.indexOf(activeTab)
+
+      if (deltaX > 0 && currentIndex < tabs.length - 1) {
+        // Swipe left - next tab
+        setActiveTab(tabs[currentIndex + 1])
+      } else if (deltaX < 0 && currentIndex > 0) {
+        // Swipe right - previous tab
+        setActiveTab(tabs[currentIndex - 1])
+      }
+    }
+
+    touchStartX.current = null
+    touchStartY.current = null
+  }, [activeTab, tabs])
 
   return (
-    <section id="ai-lab" className="relative py-16 sm:py-20 lg:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="ai-lab" className="relative py-12 sm:py-16 lg:py-20 overflow-hidden">
+      {/* Section background effects */}
+      <div className="absolute inset-0 -z-20">
+        <div className="absolute top-1/4 left-0 w-96 h-96 bg-lightning-yellow/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-lightning-orange/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-3/4 left-1/3 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl"></div>
+      </div>
+
+      {/* Lightning grid pattern */}
+      <div className="absolute inset-0 -z-10 opacity-20">
+        <div className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-transparent via-lightning-yellow/20 to-transparent"></div>
+        <div className="absolute top-0 left-3/4 w-px h-full bg-gradient-to-b from-transparent via-lightning-orange/20 to-transparent"></div>
+        <div className="absolute top-1/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-lightning-yellow/20 to-transparent"></div>
+        <div className="absolute top-2/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-lightning-orange/20 to-transparent"></div>
+      </div>
+
+      <div className="container mx-auto px-3 sm:px-5 lg:px-7 xl:px-10 max-w-5xl relative">
 
         {/* Hero Section */}
-        <AILabsHero onDemoComplete={() => setDemoCompleted(true)} />
+        <AILabsHero />
 
-        {/* Main Content */}
-        <StaggerContainer className="space-y-8">
+        {/* Tab Navigation */}
+        <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />
 
-          {/* AI Playground */}
-          <StaggerItem>
-            <Card className="bg-lightning-dark/20 border-lightning-gray/50">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lightning-yellow text-2xl sm:text-3xl flex items-center gap-3">
-                    <CircularLightningPulseAlwaysOn intensity="low" className="inline-block">
-                      <span>⚡</span>
-                    </CircularLightningPulseAlwaysOn>
-                    AI Playground
-                  </CardTitle>
+        {/* Content Area with enhanced styling and swipe support */}
+        <div
+          ref={contentRef}
+          className="relative min-h-[500px] touch-pan-y"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Content background */}
+          <div className="absolute inset-0 glass-morphism rounded-3xl border-2 border-lightning-gray/20 shadow-2xl overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-lightning-yellow/5 via-transparent to-lightning-orange/5"></div>
 
-                  {demoCompleted && (
-                    <Badge className="bg-lightning-gradient text-lightning-black font-semibold">
-                      Systems Online
-                    </Badge>
-                  )}
-                </div>
-              </CardHeader>
+            {/* Corner accents */}
+            <div className="absolute top-0 left-0 w-16 h-16">
+              <div className="absolute top-3 left-3 w-2 h-8 bg-lightning-yellow/40 rounded-full"></div>
+              <div className="absolute top-3 left-3 w-8 h-2 bg-lightning-yellow/40 rounded-full"></div>
+            </div>
+            <div className="absolute top-0 right-0 w-16 h-16">
+              <div className="absolute top-3 right-3 w-2 h-8 bg-lightning-orange/40 rounded-full"></div>
+              <div className="absolute top-3 right-3 w-8 h-2 bg-lightning-orange/40 rounded-full"></div>
+            </div>
+          </div>
 
-              <CardContent className="p-6">
-                {/* Tab Navigation */}
-                <AIPlaygroundTabs
-                  activeTab={activeTab}
-                  onTabChange={setActiveTab}
-                />
+          {/* Swipe indicator for mobile */}
+          <div className="absolute top-2 left-1/2 transform -translate-x-1/2 z-20 sm:hidden">
+            <div className="flex items-center gap-1 px-3 py-1 bg-lightning-black/60 rounded-full border border-lightning-gray/40">
+              <div className="flex gap-1">
+                {tabs.map((tab) => (
+                  <div
+                    key={tab}
+                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                      activeTab === tab ? 'bg-lightning-yellow' : 'bg-lightning-gray/60'
+                    }`}
+                  />
+                ))}
+              </div>
+              <span className="text-xs text-gray-400 ml-2">Swipe ↔</span>
+            </div>
+          </div>
 
-                {/* Tab Content */}
-                <div className="relative">
-                  <SlideIn key={activeTab} direction="up" duration={0.3}>
-                    <TabContent tabId={activeTab} />
-                  </SlideIn>
-                </div>
-              </CardContent>
-            </Card>
-          </StaggerItem>
+          {/* Enhanced content transitions */}
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 30, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -30, scale: 0.98 }}
+            transition={{
+              duration: 0.4,
+              ease: [0.21, 1.11, 0.81, 0.99],
+              type: "spring",
+              bounce: 0.1
+            }}
+            className="relative z-10 p-6 sm:p-8 lg:p-10 pt-12 sm:pt-6"
+            role="tabpanel"
+            id={`${activeTab}-panel`}
+            aria-labelledby={`${activeTab}-tab`}
+          >
+            {/* Tab content with stagger effect */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1, duration: 0.3 }}
+            >
+              {activeTab === 'assistant' && <AIAssistantTab />}
+              {activeTab === 'rag' && <RAGDemoTab />}
+              {activeTab === 'analytics' && <AnalyticsTab />}
+            </motion.div>
+          </motion.div>
 
-          {/* Professional CTA */}
-          <StaggerItem>
-            <Card className="bg-lightning-gradient/10 border-lightning-yellow text-center">
-              <CardContent className="p-8">
-                <h3 className="text-lightning-yellow text-xl font-semibold mb-3">
-                  Ready to Build Something Amazing?
-                </h3>
-                <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-                  These AI capabilities showcase what&apos;s possible with modern technology.
-                  Let&apos;s discuss how we can implement similar solutions for your project.
-                </p>
-                <motion.a
-                  href="#connect"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="inline-flex items-center gap-2 bg-lightning-gradient text-lightning-black font-semibold px-6 py-3 rounded-lg hover:shadow-lg transition-all duration-300"
-                >
-                  Let&apos;s Connect ⚡
-                </motion.a>
-              </CardContent>
-            </Card>
-          </StaggerItem>
+          {/* Lightning connection from tabs */}
+          <motion.div
+            initial={{ scaleY: 0 }}
+            animate={{ scaleY: 1 }}
+            transition={{ delay: 0.2, duration: 0.4 }}
+            className="absolute -top-6 left-1/2 transform -translate-x-1/2 w-px h-6 bg-gradient-to-b from-lightning-yellow/60 to-transparent"
+          />
 
-        </StaggerContainer>
+          {/* Floating elements */}
+          <div className="absolute -top-2 -right-2 text-lightning-yellow/30 text-sm animate-float-slow">⚡</div>
+          <div className="absolute -bottom-2 -left-2 text-lightning-orange/30 text-xs animate-float-delayed">⚡</div>
+        </div>
+
       </div>
     </section>
   )

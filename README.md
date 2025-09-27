@@ -2,26 +2,57 @@
 
 A cutting-edge portfolio website built with Next.js 15 and React 19, featuring comprehensive AI integration that demonstrates modern AI-powered development capabilities for SMB clients.
 
-## 🤖 AI-Enhanced Features
+## 🤖 AI Labs Interactive Playground
 
-This portfolio showcases real AI capabilities through:
-- **AI-Enhanced Contact Form** - Real-time project analysis and budget estimation
-- **Interactive Case Study Q&A** - AI explains technical decisions and business impact
-- **Smart Service Recommendations** - AI matches client needs to appropriate services
-- **Project Complexity Analyzer** - Detailed analysis with timeline and cost breakdown
-- **AI Showcase Section** - Live analytics, timezone coordination, and workflow demos
-- **Floating AI Chat Assistant** - 24/7 AI-powered visitor support
+This portfolio features a comprehensive AI Labs section that demonstrates production-ready AI development capabilities:
+
+### **🔬 AI Assistant Tab**
+- Real-time GPT-5-nano streaming chat interface
+- IP-based rate limiting (10 questions/week, resets Monday 12:00 AM KST)
+- Session management with usage statistics
+- Professional error handling and loading states
+
+### **📚 RAG Demo Tab**
+- Complete document processing system (PDF, DOCX, TXT support)
+- Real-time vector embeddings with Supabase pgvector
+- Document-aware chat with semantic search
+- 6-step processing visualization with smooth animations
+- Privacy-focused auto-deletion (2-hour expiration)
+
+### **📊 Analytics Tab**
+- Live system metrics dashboard with real-time data
+- Rate limiting visualization with animated progress bars
+- System health monitoring (AI Agent, RAG System, Database)
+- Usage analytics with professional status indicators
+
+### **📱 Mobile Experience**
+- Touch-friendly swipe navigation between tabs
+- Visual swipe indicators and dot navigation
+- Responsive glass morphism design with lightning theme
+- Production-ready mobile-first architecture
 
 ## 🚀 Tech Stack
 
+### **Core Technologies**
 - **Framework:** Next.js 15 with App Router
 - **Frontend:** React 19, TypeScript 5.9+
-- **AI Integration:** Vercel AI SDK v5.0+ with OpenAI GPT-4o-mini
+- **Database:** Supabase PostgreSQL with pgvector extension
+- **AI Integration:** Vercel AI SDK v5.0+ with OpenAI GPT-5-nano
 - **Styling:** Tailwind CSS v4 with Lightning Design System
-- **Responsive Design:** Mobile-first with 6-breakpoint system (280px → 2560px+)
+- **UI Components:** Shadcn UI + Radix UI with glass morphism effects
+
+### **AI & Backend Infrastructure**
+- **Vector Database:** Supabase pgvector for RAG document processing
+- **Rate Limiting:** IP-based tracking with Korean timezone weekly resets
+- **Document Storage:** Secure upload with automatic 2-hour expiration
+- **Real-time Analytics:** Live usage metrics and system monitoring
+- **Streaming Responses:** GPT-5-nano with real-time AI chat
+
+### **Design & Performance**
+- **Responsive Design:** Mobile-first with swipe navigation support
 - **Animations:** Motion library 12.23+ with reduced-motion support
-- **UI Components:** Shadcn UI + Radix UI
-- **Development:** Turbopack for fast development builds
+- **Performance:** Turbopack for fast development builds
+- **Mobile Experience:** Touch-friendly interactions with visual feedback
 
 ## 🛠️ Development
 
@@ -45,7 +76,20 @@ This portfolio showcases real AI capabilities through:
 3. **Set up environment variables:**
    ```bash
    cp .env.example .env.local
-   # Add your OpenAI API key to .env.local
+   ```
+
+   Add the following to `.env.local`:
+   ```env
+   # OpenAI Configuration
+   OPENAI_API_KEY=your_openai_api_key_here
+
+   # Supabase Configuration (for AI Labs)
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+
+   # Database Configuration
+   DATABASE_URL=your_supabase_postgres_connection_string
    ```
 
 4. **Start development server:**
@@ -65,52 +109,86 @@ This portfolio showcases real AI capabilities through:
 - `npm run lint` - Run ESLint
 - `npm run type-check` - Run TypeScript type checking
 
-## 🏗️ Project Structure
+## 🏗️ AI Labs Architecture
 
+### **API Endpoints**
 ```
-src/
-├── app/                    # Next.js App Router
-│   ├── api/ai/            # AI API endpoints
-│   │   ├── chat/          # AI chat functionality
-│   │   ├── analyze-project/ # Project analysis
-│   │   ├── estimate-budget/ # Budget estimation
-│   │   └── recommend-services/ # Service recommendations
-│   ├── layout.tsx         # Root layout with Lightning theme
-│   ├── page.tsx          # Homepage with AI components
-│   └── globals.css       # Global styles + Lightning design system
-├── components/           # React components
-│   ├── ui/              # Shadcn UI components
-│   ├── ai-enhanced-contact-form.tsx
-│   ├── interactive-case-study.tsx
-│   ├── smart-service-recommendations.tsx
-│   ├── project-complexity-analyzer.tsx
-│   ├── ai-showcase-section.tsx
-│   └── simple-ai-chat.tsx
-├── lib/                 # Shared utilities
-│   ├── ai-config.ts    # AI provider configuration
-│   ├── ai-service.ts   # AI service layer
-│   ├── ai-types.ts     # TypeScript types for AI
-│   ├── portfolio-content.ts # Content data
-│   └── utils.ts        # Utility functions
+src/app/api/ai/
+├── chat/route.ts           # GPT-5-nano streaming chat with RAG integration
+├── rate-limit/route.ts     # IP-based rate limiting and usage analytics
+├── documents/upload/route.ts # Document upload and processing
+└── cleanup/route.ts        # Automatic document expiration system
 ```
 
-## 🎨 Features
+### **AI Labs Components**
+```
+src/components/
+├── sections/
+│   └── ai-lab-section.tsx  # Main AI Labs with swipe navigation
+├── ai-labs/
+│   ├── ai-assistant-tab.tsx # Chat interface with rate limiting
+│   ├── rag-demo-tab.tsx    # Document upload and processing
+│   └── analytics-tab.tsx   # System metrics dashboard
+└── ui/                     # Shadcn UI components
+```
 
-### Core Portfolio Features
+### **Backend Integration**
+```
+src/lib/
+├── ai-config.ts           # AI model configurations and settings
+├── ai-service.ts          # AI service layer with streaming support
+├── rate-limit.ts          # Supabase rate limiting implementation
+├── document-processor.ts  # RAG document processing with pgvector
+└── utils.ts              # Utility functions and helpers
+```
+
+### **Database Schema (Supabase)**
+```sql
+-- Rate limiting table
+usage_tracking (
+  id: uuid PRIMARY KEY,
+  ip_address: text,
+  action_type: text,
+  created_at: timestamp,
+  document_id: uuid,
+  response_time_ms: integer
+)
+
+-- Document storage with pgvector
+documents (
+  id: uuid PRIMARY KEY,
+  filename: text,
+  content_chunks: text[],
+  embeddings: vector(1536), -- OpenAI embedding vectors
+  created_at: timestamp,
+  expires_at: timestamp
+)
+```
+
+## 🎨 Portfolio Features
+
+### **AI Labs Interactive Playground**
+- **Production-Ready RAG System:** Complete document processing with vector embeddings
+- **Streaming AI Chat:** Real-time GPT-5-nano responses with context awareness
+- **Advanced Rate Limiting:** IP-based tracking with Korean timezone weekly resets
+- **Mobile Swipe Navigation:** Touch-friendly tab switching with visual feedback
+- **System Analytics Dashboard:** Live metrics and health monitoring
+- **Privacy-First Design:** Automatic document cleanup and secure processing
+
+### **Core Portfolio Features**
 - **Lightning Design System:** Custom dark theme with electric yellow/orange accents
-- **Mobile-First Responsive Design:** Perfect scaling from fold phones (280px) to 4K displays (2560px+)
-- **Modern Animations:** Smooth transitions using Motion library with reduced-motion support
-- **Professional Profile:** High-quality headshot with floating animations
-- **Server Components:** Leverages React 19 and Next.js 15 features
-- **Type Safety:** Full TypeScript integration throughout
-- **Performance:** Optimized with Turbopack for lightning-fast development
+- **Glass Morphism UI:** Modern backdrop blur effects with professional styling
+- **Mobile-First Responsive:** Perfect scaling from 280px fold phones to 4K displays
+- **Motion Animations:** Smooth transitions with reduced-motion accessibility support
+- **TypeScript Safety:** Full type coverage with comprehensive error handling
+- **Performance Optimized:** Next.js 15 with Turbopack for lightning-fast development
 
-### AI-Powered Business Features
-- **Real-time Project Analysis:** AI analyzes visitor requirements instantly
-- **Smart Lead Qualification:** Automated assessment of project complexity and budget
-- **Interactive Demonstrations:** Live showcase of AI capabilities for potential clients
-- **24/7 Availability:** AI chat handles inquiries during factory work hours
-- **Professional Positioning:** Demonstrates AI expertise through working examples
+### **Technical Demonstrations**
+- **Full-Stack AI Integration:** Backend infrastructure with Supabase and pgvector
+- **Modern Development Workflow:** Showcases cutting-edge tools and practices
+- **Production Architecture:** Enterprise-grade system design and implementation
+- **Responsive Design Mastery:** Professional mobile experience with swipe gestures
+- **Security Best Practices:** Rate limiting, data expiration, and privacy controls
 
 ## 📱 Responsive Design
 

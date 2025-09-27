@@ -66,7 +66,7 @@ Timeline: ${request.timeline || 'Flexible'}`
       let analysis
       try {
         analysis = JSON.parse(text)
-      } catch (parseError) {
+      } catch {
         // Fallback analysis if JSON parsing fails
         analysis = {
           recommendedServices: ['AI Integration'],
@@ -186,7 +186,7 @@ Return as JSON array of service recommendations with relevanceScore, reasoning, 
 
       try {
         return JSON.parse(text)
-      } catch (parseError) {
+      } catch {
         // Fallback recommendations
         return [
           {
@@ -244,7 +244,7 @@ Provide JSON response with:
           projectId: caseStudyId,
           ...analysis
         }
-      } catch (parseError) {
+      } catch {
         return {
           projectId: caseStudyId,
           complexity: 'medium',
@@ -289,7 +289,7 @@ Provide JSON response with:
 
       try {
         return JSON.parse(text)
-      } catch (parseError) {
+      } catch {
         // Fallback insights
         return [
           {
@@ -318,7 +318,7 @@ Provide JSON response with:
 
     try {
       const provider = getAvailableProvider()
-      const { text } = await generateText({
+      await generateText({
         ...modelConfigs.fast,
         messages: [
           {
@@ -333,7 +333,7 @@ Provide JSON response with:
         provider: provider || undefined
       }
 
-    } catch (error) {
+    } catch {
       return {
         status: 'error',
         error: 'AI service unavailable'

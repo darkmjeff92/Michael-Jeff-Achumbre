@@ -53,7 +53,7 @@ export default function Home() {
                   Journey
                 </SmoothScrollLink>
                 <SmoothScrollLink href="#ai-lab" className="text-sm text-white hover:text-lightning-yellow transition-colors duration-200" aria-label="Navigate to AI lab section">
-                  AI Lab
+                  AI Labz
                 </SmoothScrollLink>
                 <SmoothScrollLink href="#projects" className="text-sm text-white hover:text-lightning-yellow transition-colors duration-200" aria-label="Navigate to case study section">
                   Case Study
@@ -195,7 +195,7 @@ export default function Home() {
                         alignItems: 'center',
                       }}
                     >
-                      AI Lab
+                      AI Labz
                     </SmoothScrollLink>
                   </motion.div>
 

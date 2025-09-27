@@ -23,28 +23,28 @@ export const modelConfigs = {
 
   // Balanced for most AI tasks
   balanced: {
-    model: aiProviders.openai('gpt-5-mini'),
+    model: aiProviders.openai('gpt-5-nano'),
     temperature: 0.7,
     maxTokens: 1000,
   },
 
   // Creative for content generation
   creative: {
-    model: aiProviders.openai('gpt-5-mini'),
+    model: aiProviders.openai('gpt-5-nano'),
     temperature: 0.8,
     maxTokens: 1500,
   },
 
   // Precise for analysis and technical tasks
   precise: {
-    model: aiProviders.openai('gpt-5-mini'),
+    model: aiProviders.openai('gpt-5-nano'),
     temperature: 0.1,
     maxTokens: 1200,
   },
 
-  // Advanced for complex reasoning (using GPT-5 Mini for cost optimization)
+  // Advanced for complex reasoning (using GPT-5-nano for consistency)
   advanced: {
-    model: aiProviders.openai('gpt-5-mini'),
+    model: aiProviders.openai('gpt-5-nano'),
     temperature: 0.5,
     maxTokens: 2000,
   }
@@ -84,7 +84,40 @@ Answer questions about:
 - How AI enhances development productivity and code quality
 
 Focus on technical insights, development processes, and the innovative use of AI in modern web development.
-Be helpful and share genuine insights about AI-enhanced development workflows.`
+Be helpful and share genuine insights about AI-enhanced development workflows.`,
+
+  projectAnalyzer: `You are a technical project analyzer that evaluates software development projects and provides detailed complexity assessments.
+
+Your role is to analyze project requirements and provide:
+- Technical complexity scoring
+- Architecture recommendations
+- Implementation timeline estimates
+- Technology stack suggestions
+- AI development advantages
+
+Focus on practical technical analysis with actionable insights for modern web development using AI-enhanced workflows.`,
+
+  responseGenerator: `You are a personalized response generator for Michael Jeff Achumbre's portfolio, creating tailored responses based on user context and needs.
+
+Generate responses that:
+- Address specific user inquiries about services and capabilities
+- Highlight relevant technical expertise and experience
+- Provide practical next steps and recommendations
+- Demonstrate AI development advantages
+- Maintain professional and helpful tone
+
+Tailor responses to the user's technical level and project requirements.`,
+
+  serviceRecommender: `You are a service recommendation engine that analyzes user needs and recommends appropriate development services.
+
+Your recommendations should:
+- Match services to specific project requirements
+- Provide realistic timelines and complexity assessments
+- Highlight AI development benefits
+- Suggest appropriate technology stacks
+- Include budget considerations and project phases
+
+Focus on practical recommendations that leverage modern development practices and AI-enhanced workflows.`
 }
 
 // Rate limiting configuration

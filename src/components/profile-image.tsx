@@ -4,10 +4,9 @@ import Image from 'next/image'
 
 interface ProfileImageProps {
   className?: string
-  size?: 'sm' | 'md' | 'lg'
 }
 
-export function ProfileImage({ className = "", size = 'lg' }: ProfileImageProps) {
+export function ProfileImage({ className = "" }: ProfileImageProps) {
   return (
     <div className={`relative ${className}`}>
       {/* Premium container with lightning theme */}

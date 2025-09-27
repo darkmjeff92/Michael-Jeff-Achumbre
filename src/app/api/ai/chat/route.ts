@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { streamText } from 'ai'
-import { createOpenAI } from '@ai-sdk/openai'
-
-const openai = createOpenAI({
-  apiKey: process.env.OPENAI_API_KEY || '',
-})
+import { modelConfigs } from '@/lib/ai-config'
+import { checkRateLimit, trackUsage, getClientIP } from '@/lib/rate-limit'
+import { searchSimilarChunks } from '@/lib/document-processor'
 
 export async function POST(req: NextRequest) {
+  const startTime = Date.now()
+
   try {
     if (!process.env.OPENAI_API_KEY) {
       return NextResponse.json(
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const { messages, context = 'general' } = await req.json()
+    const { messages, context = 'general', documentSession } = await req.json()
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json(
@@ -24,12 +24,22 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const result = await streamText({
-      model: openai('gpt-5-mini'),
-      messages: [
+    // Get client IP and check rate limits
+    const clientIP = getClientIP(req)
+    const rateLimitResult = await checkRateLimit(clientIP)
+
+    if (!rateLimitResult.canQuestion) {
+      return NextResponse.json(
         {
-          role: 'system',
-          content: `You are Michael Jeff Achumbre's AI assistant, helping visitors learn about his services and capabilities.
+          error: `Rate limit exceeded: ${rateLimitResult.questionsUsed}/${rateLimitResult.questionsLimit} questions used this week`,
+          rateLimit: rateLimitResult
+        },
+        { status: 429 }
+      )
+    }
+
+    // Enhanced system prompt based on context
+    let systemPrompt = `You are Michael Jeff Achumbre's AI assistant, helping visitors learn about his services and capabilities.
 
 Michael's Profile:
 - AI-First Developer & Automation Builder
@@ -64,7 +74,54 @@ Your Role:
 - Direct serious inquiries to the contact form
 - Be helpful, professional, and demonstrate AI value
 
-Conversation Context: ${context}
+Conversation Context: ${context}`
+
+    // Add document-aware context if available
+    if (context === 'document-aware' && documentSession) {
+      // Get the latest user message to search for relevant document chunks
+      const latestMessage = messages[messages.length - 1]?.content || ''
+
+      // Search for relevant document chunks
+      const relevantChunks = await searchSimilarChunks(latestMessage, documentSession.id, 3)
+
+      let documentContext = ''
+      if (relevantChunks.length > 0) {
+        documentContext = `
+
+RELEVANT DOCUMENT CONTENT:
+Based on the user's question, here are the most relevant sections from their document "${documentSession.filename}":
+
+${relevantChunks.map((chunk, index) =>
+  `[Chunk ${index + 1}] (Similarity: ${(chunk.similarity * 100).toFixed(1)}%)
+${chunk.chunk_text}
+
+`).join('')}
+
+Use this content to provide accurate, specific answers about the document.`
+      }
+
+      systemPrompt += `
+
+DOCUMENT MODE ACTIVE:
+The user has uploaded a document: "${documentSession.filename}"
+You can now answer questions about BOTH the document content AND Michael's technical services.
+${documentContext}
+
+When discussing the document:
+- Use the relevant document content provided above to give accurate answers
+- Be helpful and analytical about the document content
+- Explain how the RAG (Retrieval Augmented Generation) system works
+- Mention the technical implementation (Supabase + pgvector, OpenAI embeddings, Next.js)
+- Show how this demonstrates Michael's AI integration capabilities
+
+When discussing technical details:
+- Explain the AI Labs architecture and implementation
+- Highlight the technologies used: Next.js 15, Supabase, OpenAI, TypeScript
+- Mention the rate limiting, privacy features, and real-time analytics
+- Connect it back to Michael's AI development services`
+    }
+
+    systemPrompt += `
 
 Guidelines:
 - Keep responses concise and practical
@@ -73,10 +130,32 @@ Guidelines:
 - Reference specific examples when relevant
 - Always end with a helpful next step
 - Never make promises about pricing without project details`
+
+    const result = await streamText({
+      model: modelConfigs.balanced.model,
+      messages: [
+        {
+          role: 'system',
+          content: systemPrompt
         },
         ...messages
       ],
-      temperature: 0.7,
+      temperature: modelConfigs.balanced.temperature,
+    })
+
+    // Track usage after successful request
+    const responseTime = Date.now() - startTime
+    await trackUsage({
+      ipAddress: clientIP,
+      actionType: 'question',
+      documentId: documentSession?.id,
+      responseTimeMs: responseTime,
+      userAgent: req.headers.get('user-agent') || undefined,
+      metadata: {
+        context,
+        hasDocument: !!documentSession,
+        messageCount: messages.length
+      }
     })
 
     return result.toTextStreamResponse()

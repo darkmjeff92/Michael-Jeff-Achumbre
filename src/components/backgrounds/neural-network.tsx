@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useRef, memo } from "react"
-import { motion } from "motion/react"
+import { useEffect, useRef, memo, useState } from "react"
+import { motion, useReducedMotion } from "motion/react"
 
 interface NeuralNetworkProps {
   intensity?: "low" | "medium" | "high"
@@ -18,10 +18,29 @@ interface Node {
 
 function NeuralNetworkComponent({ intensity = "medium", className = "" }: NeuralNetworkProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [isInView, setIsInView] = useState(false)
+  const shouldReduceMotion = useReducedMotion()
+
+  // Intersection Observer for viewport detection
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting)
+      },
+      { threshold: 0.1 }
+    )
+
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas) return
+    if (!canvas || shouldReduceMotion || !isInView) return
 
     const ctx = canvas.getContext("2d")
     if (!ctx) return
@@ -155,10 +174,10 @@ function NeuralNetworkComponent({ intensity = "medium", className = "" }: Neural
       window.removeEventListener("resize", updateCanvasSize)
       cancelAnimationFrame(animationId)
     }
-  }, [intensity])
+  }, [intensity, isInView, shouldReduceMotion])
 
   return (
-    <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
+    <div ref={containerRef} className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"
@@ -175,11 +194,12 @@ function NeuralNetworkComponent({ intensity = "medium", className = "" }: Neural
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
             }}
-            animate={{
+            whileInView={shouldReduceMotion ? {} : {
               scale: [0.5, 1.5, 0.5],
               opacity: [0.3, 0.8, 0.3],
             }}
-            transition={{
+            viewport={{ amount: 0.1 }}
+            transition={shouldReduceMotion ? {} : {
               duration: 3 + Math.random() * 2,
               repeat: Infinity,
               delay: Math.random() * 2,

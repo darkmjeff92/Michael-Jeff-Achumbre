@@ -8,6 +8,7 @@ interface SmoothScrollLinkProps {
   className?: string
   onClick?: () => void
   'aria-label'?: string
+  style?: React.CSSProperties
 }
 
 export function SmoothScrollLink({
@@ -15,7 +16,8 @@ export function SmoothScrollLink({
   children,
   className = "",
   onClick,
-  'aria-label': ariaLabel
+  'aria-label': ariaLabel,
+  style
 }: SmoothScrollLinkProps) {
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault()
@@ -51,6 +53,7 @@ export function SmoothScrollLink({
       className={className}
       onClick={handleClick}
       aria-label={ariaLabel}
+      style={style}
     >
       {children}
     </a>

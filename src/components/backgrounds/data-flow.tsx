@@ -1,7 +1,7 @@
 "use client"
 
 import { memo } from "react"
-import { motion } from "motion/react"
+import { motion, useReducedMotion } from "motion/react"
 
 interface DataFlowProps {
   intensity?: "low" | "medium" | "high"
@@ -18,6 +18,8 @@ interface DataStream {
 }
 
 function DataFlowComponent({ intensity = "medium", className = "" }: DataFlowProps) {
+  const shouldReduceMotion = useReducedMotion()
+
   // Configuration based on intensity
   const config = {
     low: { streamCount: 6, baseOpacity: 0.08, maxThickness: 2 },
@@ -28,7 +30,7 @@ function DataFlowComponent({ intensity = "medium", className = "" }: DataFlowPro
   // Generate data streams
   const dataStreams: DataStream[] = Array.from({ length: config.streamCount }, (_, i) => ({
     id: i,
-    direction: ["horizontal", "vertical", "diagonal"][Math.floor(Math.random() * 3)] as any,
+    direction: (["horizontal", "vertical", "diagonal"] as const)[Math.floor(Math.random() * 3)],
     delay: Math.random() * 15,
     duration: 8 + Math.random() * 12,
     opacity: config.baseOpacity + Math.random() * config.baseOpacity,
@@ -67,12 +69,13 @@ function DataFlowComponent({ intensity = "medium", className = "" }: DataFlowPro
             scaleX: stream.direction === "horizontal" ? 0 : 1,
             scaleY: stream.direction === "vertical" ? 0 : 1
           }}
-          animate={{
+          whileInView={shouldReduceMotion ? {} : {
             opacity: [0, 1, 0.7, 0],
             scaleX: stream.direction === "horizontal" ? [0, 1, 1, 0] : 1,
             scaleY: stream.direction === "vertical" ? [0, 1, 1, 0] : 1
           }}
-          transition={{
+          viewport={{ amount: 0.1 }}
+          transition={shouldReduceMotion ? {} : {
             duration: stream.duration,
             delay: stream.delay,
             repeat: Infinity,
@@ -92,7 +95,7 @@ function DataFlowComponent({ intensity = "medium", className = "" }: DataFlowPro
             top: `${particle.y}%`,
             background: "radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, rgba(255, 107, 53, 0.4) 50%, transparent 100%)"
           }}
-          animate={{
+          whileInView={shouldReduceMotion ? {} : {
             scale: [0.5, 1.5, 1, 1.2, 0.8],
             opacity: [0.3, 0.8, 0.6, 0.9, 0.4],
             boxShadow: [
@@ -103,7 +106,8 @@ function DataFlowComponent({ intensity = "medium", className = "" }: DataFlowPro
               "0 0 5px rgba(255, 215, 0, 0.3)"
             ]
           }}
-          transition={{
+          viewport={{ amount: 0.1 }}
+          transition={shouldReduceMotion ? {} : {
             duration: particle.duration,
             delay: particle.delay,
             repeat: Infinity,
@@ -121,10 +125,11 @@ function DataFlowComponent({ intensity = "medium", className = "" }: DataFlowPro
             radial-gradient(circle at 75% 75%, rgba(255, 107, 53, 0.015) 0%, transparent 50%)
           `
         }}
-        animate={{
+        whileInView={shouldReduceMotion ? {} : {
           opacity: [0.5, 1, 0.7, 1]
         }}
-        transition={{
+        viewport={{ amount: 0.1 }}
+        transition={shouldReduceMotion ? {} : {
           duration: 8,
           repeat: Infinity,
           ease: "easeInOut"
@@ -140,13 +145,14 @@ function DataFlowComponent({ intensity = "medium", className = "" }: DataFlowPro
             left: `${10 + i * 25}%`,
             top: `${20 + Math.random() * 60}%`
           }}
-          animate={{
+          whileInView={shouldReduceMotion ? {} : {
             x: [0, 100, 200, 300, 0],
             y: [0, -20, 20, -10, 0],
             opacity: [0, 1, 1, 1, 0],
             scale: [0.5, 1, 0.8, 1.2, 0.5]
           }}
-          transition={{
+          viewport={{ amount: 0.1 }}
+          transition={shouldReduceMotion ? {} : {
             duration: 6 + Math.random() * 4,
             delay: i * 1.5,
             repeat: Infinity,

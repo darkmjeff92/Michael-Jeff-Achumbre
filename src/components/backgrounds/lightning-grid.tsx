@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useRef, memo } from "react"
-import { motion } from "motion/react"
+import { useEffect, useRef, memo, useState } from "react"
+import { motion, useReducedMotion } from "motion/react"
 
 interface LightningGridProps {
   intensity?: "low" | "medium" | "high"
@@ -10,10 +10,29 @@ interface LightningGridProps {
 
 function LightningGridComponent({ intensity = "medium", className = "" }: LightningGridProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [isInView, setIsInView] = useState(false)
+  const shouldReduceMotion = useReducedMotion()
+
+  // Intersection Observer for viewport detection
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting)
+      },
+      { threshold: 0.1 }
+    )
+
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas) return
+    if (!canvas || shouldReduceMotion || !isInView) return
 
     const ctx = canvas.getContext("2d")
     if (!ctx) return
@@ -105,10 +124,10 @@ function LightningGridComponent({ intensity = "medium", className = "" }: Lightn
       window.removeEventListener("resize", updateCanvasSize)
       cancelAnimationFrame(animationId)
     }
-  }, [intensity])
+  }, [intensity, isInView, shouldReduceMotion])
 
   return (
-    <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
+    <div ref={containerRef} className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"
@@ -126,10 +145,11 @@ function LightningGridComponent({ intensity = "medium", className = "" }: Lightn
             `,
             backgroundSize: "80px 80px"
           }}
-          animate={{
+          whileInView={shouldReduceMotion ? {} : {
             opacity: [0.3, 0.6, 0.3],
           }}
-          transition={{
+          viewport={{ amount: 0.1 }}
+          transition={shouldReduceMotion ? {} : {
             duration: 4,
             repeat: Infinity,
             ease: "easeInOut"

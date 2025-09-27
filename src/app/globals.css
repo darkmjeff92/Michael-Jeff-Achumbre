@@ -16,20 +16,35 @@
   --color-accent: var(--color-lightning-yellow);
   --color-accent-secondary: var(--color-lightning-orange);
 
-  /* Typography Scale */
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
-  --font-size-4xl: 2.25rem;
-  --font-size-5xl: 3rem;
-  --font-size-6xl: 3.75rem;
-  --font-size-7xl: 4.5rem;
-  --font-size-8xl: 6rem;
-  --font-size-9xl: 8rem;
+  /* Enhanced Typography Scale - Linear/Framer Inspired */
+  --font-size-xs: 0.75rem;      /* 12px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;     /* 18px */
+  --font-size-xl: 1.25rem;      /* 20px */
+  --font-size-2xl: 1.5rem;      /* 24px */
+  --font-size-3xl: 1.875rem;    /* 30px */
+  --font-size-4xl: 2.25rem;     /* 36px */
+  --font-size-5xl: 3rem;        /* 48px */
+  --font-size-6xl: 3.75rem;     /* 60px */
+  --font-size-7xl: 4.5rem;      /* 72px */
+  --font-size-8xl: 6rem;        /* 96px */
+  --font-size-9xl: 8rem;        /* 128px */
+
+  /* Line Height Scale for better readability */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  /* Letter Spacing for premium typography */
+  --letter-spacing-tighter: -0.05em;
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.1em;
 
   /* Font Weights */
   --font-weight-light: 300;
@@ -75,12 +90,20 @@
   --radius-3xl: 2rem;
   --radius-full: 9999px;
 
-  /* Standard Tailwind Breakpoints */
-  --breakpoint-sm: 640px;        /* Small devices */
-  --breakpoint-md: 768px;        /* Medium devices */
-  --breakpoint-lg: 1024px;       /* Large devices */
-  --breakpoint-xl: 1280px;       /* Extra large devices */
-  --breakpoint-2xl: 1536px;      /* 2X large devices */
+  /* Enhanced Mobile-First Breakpoints */
+  --breakpoint-xs: 480px;        /* Large phones - 480px+ */
+  --breakpoint-sm: 640px;        /* Small tablets - 640px+ */
+  --breakpoint-md: 768px;        /* Medium tablets - 768px+ */
+  --breakpoint-lg: 1024px;       /* Laptops - 1024px+ */
+  --breakpoint-xl: 1280px;       /* Desktop - 1280px+ */
+  --breakpoint-2xl: 1536px;      /* Large desktop - 1536px+ */
+  --breakpoint-3xl: 1920px;      /* 4K displays - 1920px+ */
+
+  /* Device-specific breakpoints */
+  --breakpoint-fold: 320px;      /* Galaxy Fold - 320px+ */
+  --breakpoint-iphone-se: 375px; /* iPhone SE - 375px+ */
+  --breakpoint-tablet-sm: 768px; /* Small tablet portrait */
+  --breakpoint-tablet-lg: 1024px;/* Large tablet landscape */
 
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -94,6 +117,34 @@
   /* Lightning-specific glow effects */
   --shadow-lightning-yellow: 0 0 20px var(--color-lightning-yellow);
   --shadow-lightning-orange: 0 0 20px var(--color-lightning-orange);
+
+  /* Glass morphism effects */
+  --backdrop-blur: 16px;
+  --glass-bg: rgba(26, 26, 26, 0.3);
+  --glass-border: rgba(255, 215, 0, 0.2);
+
+  /* Mobile-First Touch Target Sizes */
+  --touch-target-xs: 40px;      /* Minimum for small phones */
+  --touch-target-sm: 44px;      /* iOS/Android standard */
+  --touch-target-md: 48px;      /* Comfortable size */
+  --touch-target-lg: 56px;      /* Large buttons */
+  --touch-target-xl: 64px;      /* Extra large targets */
+
+  /* Safe Area Offsets for Notched Devices */
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+
+  /* Mobile-Optimized Spacing */
+  --mobile-padding-xs: 0.75rem; /* 12px - Very tight */
+  --mobile-padding-sm: 1rem;    /* 16px - Standard mobile */
+  --mobile-padding-md: 1.25rem; /* 20px - Comfortable */
+  --mobile-padding-lg: 1.5rem;  /* 24px - Spacious */
+
+  /* Gesture Recognition Zones */
+  --swipe-zone-width: 40px;     /* Minimum swipe detection zone */
+  --swipe-threshold: 50px;      /* Minimum swipe distance */
 }
 
 /* Base Styles */
@@ -209,11 +260,51 @@ a:focus-visible {
   background-clip: text;
 }
 
-/* Typography styles for Impact headlines */
+/* Enhanced Typography Utilities - Linear/Framer Style */
 .text-impact {
   font-weight: var(--font-weight-black);
-  letter-spacing: -0.02em;
-  line-height: 0.9;
+  letter-spacing: var(--letter-spacing-tighter);
+  line-height: var(--line-height-tight);
+}
+
+.text-display {
+  font-weight: var(--font-weight-extrabold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+}
+
+.text-headline {
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-normal);
+  line-height: var(--line-height-snug);
+}
+
+.text-body {
+  font-weight: var(--font-weight-normal);
+  letter-spacing: var(--letter-spacing-normal);
+  line-height: var(--line-height-relaxed);
+}
+
+.text-caption {
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  line-height: var(--line-height-normal);
+}
+
+/* Premium gradient text effects */
+.text-lightning-premium {
+  background: linear-gradient(135deg, #FFD700 0%, #FF6B35 50%, #8B5CF6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 /* Animation utilities */
@@ -239,16 +330,309 @@ a:focus-visible {
   }
 }
 
-/* Responsive Design Notes */
+/* Glass Morphism Utility Classes */
+.glass-morphism {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--backdrop-blur));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur));
+  border: 1px solid var(--glass-border);
+}
+
+.glass-morphism-strong {
+  background: rgba(26, 26, 26, 0.5);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+/* Lightning purple color for additional variety */
+.text-lightning-purple {
+  color: #8B5CF6;
+}
+
+.border-lightning-purple {
+  border-color: #8B5CF6;
+}
+
+.border-lightning-yellow {
+  border-color: var(--color-lightning-yellow);
+}
+
+.border-lightning-orange {
+  border-color: var(--color-lightning-orange);
+}
+
+.text-lightning-white {
+  color: var(--color-lightning-white);
+}
+
+.text-lightning-black {
+  color: var(--color-lightning-black);
+}
+
+/* Scrollbar hiding utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Lightning-themed custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(26, 26, 26, 0.3);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #FFD700, #FF6B35);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #FFD700, #FFD700);
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+/* Enhanced glow effects for glass morphism */
+.glow-yellow {
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.glow-orange {
+  box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+/* Lightning connection lines (for future animations) */
+.lightning-connection {
+  position: relative;
+}
+
+.lightning-connection::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 2px;
+  height: 50px;
+  background: linear-gradient(to bottom, transparent, var(--color-lightning-yellow), transparent);
+  transform: translateY(-50%);
+  opacity: 0.5;
+  animation: lightning-flow 2s ease-in-out infinite;
+}
+
+@keyframes lightning-flow {
+  0%, 100% {
+    opacity: 0.2;
+    transform: translateY(-50%) scaleY(0.8);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(-50%) scaleY(1.2);
+  }
+}
+
+/* Floating animations for lightning particles */
+@keyframes animate-float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.3;
+  }
+  33% {
+    transform: translateY(-10px) rotate(2deg);
+    opacity: 0.6;
+  }
+  66% {
+    transform: translateY(5px) rotate(-1deg);
+    opacity: 0.4;
+  }
+}
+
+@keyframes animate-float-delayed {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.2;
+  }
+  25% {
+    transform: translateY(-8px) rotate(-2deg);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translateY(8px) rotate(1deg);
+    opacity: 0.3;
+  }
+}
+
+@keyframes animate-float-slow {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateY(-6px) rotate(3deg);
+    opacity: 0.4;
+  }
+}
+
+.animate-float {
+  animation: animate-float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: animate-float-delayed 8s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.animate-float-slow {
+  animation: animate-float-slow 10s ease-in-out infinite;
+  animation-delay: 4s;
+}
+
+/* Enhanced button hover effects */
+.btn-lightning {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-lightning:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
+}
+
+.btn-lightning::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-lightning:hover::before {
+  left: 100%;
+}
+
+/* Card hover effects */
+.card-lightning {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.card-lightning:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 215, 0, 0.1);
+}
+
+/* Lightning border animation */
+@keyframes lightning-border {
+  0% { border-color: rgba(255, 215, 0, 0.3); }
+  50% { border-color: rgba(255, 215, 0, 0.8); }
+  100% { border-color: rgba(255, 215, 0, 0.3); }
+}
+
+.animate-lightning-border {
+  animation: lightning-border 2s ease-in-out infinite;
+}
+
+/* Mobile-First Responsive Utilities */
+
+/* Touch Target Utilities */
+.touch-target-xs { min-height: var(--touch-target-xs); min-width: var(--touch-target-xs); }
+.touch-target-sm { min-height: var(--touch-target-sm); min-width: var(--touch-target-sm); }
+.touch-target-md { min-height: var(--touch-target-md); min-width: var(--touch-target-md); }
+.touch-target-lg { min-height: var(--touch-target-lg); min-width: var(--touch-target-lg); }
+.touch-target-xl { min-height: var(--touch-target-xl); min-width: var(--touch-target-xl); }
+
+/* Safe Area Utilities */
+.pt-safe { padding-top: var(--safe-area-top); }
+.pb-safe { padding-bottom: var(--safe-area-bottom); }
+.pl-safe { padding-left: var(--safe-area-left); }
+.pr-safe { padding-right: var(--safe-area-right); }
+.px-safe { padding-left: var(--safe-area-left); padding-right: var(--safe-area-right); }
+.py-safe { padding-top: var(--safe-area-top); padding-bottom: var(--safe-area-bottom); }
+
+/* Mobile-First Spacing */
+.p-mobile-xs { padding: var(--mobile-padding-xs); }
+.p-mobile-sm { padding: var(--mobile-padding-sm); }
+.p-mobile-md { padding: var(--mobile-padding-md); }
+.p-mobile-lg { padding: var(--mobile-padding-lg); }
+
+/* Gesture Detection Zones */
+.swipe-zone {
+  width: var(--swipe-zone-width);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  touch-action: pan-y;
+}
+
+.swipe-zone-left { left: 0; }
+.swipe-zone-right { right: 0; }
+
+/* Enhanced Glass Morphism for Mobile */
+.glass-morphism-mobile {
+  background: var(--glass-bg);
+  backdrop-filter: blur(calc(var(--backdrop-blur) * 0.75)); /* Reduced blur for performance */
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+}
+
+/* Mobile-Optimized Animations */
+@media (max-width: 768px) {
+  .reduce-motion {
+    transition-duration: 0.15s;
+    animation-duration: 0.15s;
+  }
+
+  /* Disable complex animations on older/slower devices */
+  @media (hover: none) and (pointer: coarse) {
+    .disable-complex-animations {
+      animation: none !important;
+      transition: opacity 0.2s ease !important;
+    }
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .glass-morphism,
+  .glass-morphism-mobile {
+    background: rgba(0, 0, 0, 0.9);
+    border-color: var(--color-lightning-yellow);
+  }
+}
+
+/* Next.js Development Indicator Simple Fix */
+/* Note: Development indicators use Shadow DOM, so CSS targeting doesn't work.
+   Use next.config.mjs devIndicators configuration instead. */
+
+/* Responsive Breakpoint System */
 /*
- * Using standard Tailwind CSS responsive design:
- * - Mobile first approach starting at 360px (no custom breakpoints needed)
- * - sm: (640px+) - Small devices and up
- * - md: (768px+) - Medium devices and up
- * - lg: (1024px+) - Large devices and up
- * - xl: (1280px+) - Extra large devices and up
- * - 2xl: (1536px+) - 2X large devices and up
+ * Enhanced Mobile-First Breakpoints:
+ * - Base: 320px+ (Galaxy Fold, small phones)
+ * - xs: 480px+ (Large phones)
+ * - sm: 640px+ (Small tablets)
+ * - md: 768px+ (Medium tablets)
+ * - lg: 1024px+ (Laptops)
+ * - xl: 1280px+ (Desktop)
+ * - 2xl: 1536px+ (Large desktop)
+ * - 3xl: 1920px+ (4K displays)
  *
- * All responsive utilities use Tailwind's built-in system for consistency and maintainability.
- * Custom animations and Lightning effects will work across all breakpoints with proper fallbacks.
+ * Touch-first design with progressive enhancement for larger screens.
+ * All animations and effects optimized for mobile performance.
  */

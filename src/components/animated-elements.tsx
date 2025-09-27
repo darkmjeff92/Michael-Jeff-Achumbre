@@ -343,6 +343,16 @@ export function ScrollReveal({
   className = ""
 }: ScrollRevealProps) {
   const shouldReduceMotion = useReducedMotion()
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  // Render static version during SSR to prevent hydration mismatch
+  if (!isClient) {
+    return <div className={className}>{children}</div>
+  }
 
   return (
     <motion.div
@@ -377,13 +387,18 @@ export function InViewFadeIn({
   className = ""
 }: InViewFadeInProps) {
   const shouldReduceMotion = useReducedMotion()
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   return (
     <motion.div
-      initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      initial={(!isClient || shouldReduceMotion) ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: threshold }}
-      transition={shouldReduceMotion ? { duration: 0 } : {
+      transition={(!isClient || shouldReduceMotion) ? { duration: 0 } : {
         duration: duration,
         delay: delay,
         ease: [0.21, 1.11, 0.81, 0.99]
@@ -413,6 +428,11 @@ export function InViewSlideIn({
   className = ""
 }: InViewSlideInProps) {
   const shouldReduceMotion = useReducedMotion()
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   const directionOffset = {
     left: { x: -60, y: 0 },
@@ -423,13 +443,13 @@ export function InViewSlideIn({
 
   return (
     <motion.div
-      initial={shouldReduceMotion ?
+      initial={(!isClient || shouldReduceMotion) ?
         { opacity: 1, x: 0, y: 0 } :
         { opacity: 0, ...directionOffset[direction] }
       }
       whileInView={{ opacity: 1, x: 0, y: 0 }}
       viewport={{ once: true, amount: threshold }}
-      transition={shouldReduceMotion ? { duration: 0 } : {
+      transition={(!isClient || shouldReduceMotion) ? { duration: 0 } : {
         duration: duration,
         delay: delay,
         ease: [0.23, 1, 0.32, 1]
@@ -685,13 +705,15 @@ interface LightningBoltProps {
   intensity?: "low" | "medium" | "high"
   className?: string
   variant?: "strike" | "glow" | "idle"
+  style?: React.CSSProperties
 }
 
 export function LightningBolt({
   size = 24,
   intensity = "medium",
   className = "",
-  variant = "strike"
+  variant = "strike",
+  style
 }: LightningBoltProps) {
   const shouldReduceMotion = useReducedMotion()
 
@@ -751,7 +773,7 @@ export function LightningBolt({
   const config = colorConfig[intensity]
 
   return (
-    <div className={`absolute inset-0 flex items-center justify-center ${className}`}>
+    <div className={`absolute inset-0 flex items-center justify-center ${className}`} style={style}>
       <motion.svg
         width={size}
         height={size}

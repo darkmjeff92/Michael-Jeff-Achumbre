@@ -11,7 +11,6 @@ import {
   FadeIn,
   SlideIn,
   LightningPulse,
-  GradientShine,
   StaggerContainer,
   StaggerItem
 } from "@/components/animated-elements"
@@ -368,7 +367,7 @@ export function RAGDocumentDemo() {
                       <div className="text-sm">
                         <p className="text-lightning-yellow font-medium">Demo Only - Safe Documents</p>
                         <p className="text-gray-400">
-                          Don't upload confidential files. Use test documents like recipes, articles, or manuals.
+                          Don&apos;t upload confidential files. Use test documents like recipes, articles, or manuals.
                           Files are processed temporarily and deleted after your session.
                         </p>
                       </div>
@@ -515,7 +514,7 @@ export function RAGDocumentDemo() {
                   {documentPreview && (
                     <div className="mt-4 p-3 bg-lightning-black/30 rounded border border-lightning-gray">
                       <p className="text-gray-300 text-sm italic">
-                        "{documentPreview}"
+                        &ldquo;{documentPreview}&rdquo;
                       </p>
                     </div>
                   )}

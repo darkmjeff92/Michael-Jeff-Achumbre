@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ErrorBoundary } from '@/components/error-boundary'
@@ -11,8 +11,19 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://michaeljeffachumbre.com'),
   title: 'Michael Jeff Achumbre - AI-First Developer & Automation Builder',
   description: 'AI-First Developer & Automation Builder helping small to medium businesses leverage AI to work smarter with modern websites, mobile apps, smart automation, and AI integration. Based in Korea, serving global clients.',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
+      { url: '/icon.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+  },
   keywords: [
     'AI Developer',
     'AI Automation',
@@ -64,6 +75,14 @@ export const metadata: Metadata = {
   verification: {
     google: 'verification-token-here',
   },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#000000',
 }
 
 export default function RootLayout({

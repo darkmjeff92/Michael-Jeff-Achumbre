@@ -123,3 +123,6 @@ public
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+#mcp
+.mcp.json

@@ -1,7 +1,7 @@
 "use client"
 
 import { memo } from "react"
-import { motion } from "motion/react"
+import { motion, useReducedMotion } from "motion/react"
 
 interface FloatingTechProps {
   intensity?: "low" | "medium" | "high"
@@ -18,6 +18,8 @@ interface TechIcon {
 }
 
 function FloatingTechComponent({ intensity = "medium", className = "" }: FloatingTechProps) {
+  const shouldReduceMotion = useReducedMotion()
+
   // Configuration based on intensity
   const config = {
     low: { iconCount: 8, baseOpacity: 0.1, maxSize: 24 },
@@ -54,14 +56,15 @@ function FloatingTechComponent({ intensity = "medium", className = "" }: Floatin
             fontSize: `${tech.size}px`,
           }}
           initial={{ opacity: 0, scale: 0 }}
-          animate={{
+          whileInView={shouldReduceMotion ? {} : {
             opacity: [0, config.baseOpacity, config.baseOpacity * 0.7, config.baseOpacity],
             scale: [0.8, 1.2, 0.9, 1.1],
             rotate: [0, 360],
             y: [-20, 20, -15, 10],
             x: [-10, 10, -5, 15]
           }}
-          transition={{
+          viewport={{ amount: 0.1 }}
+          transition={shouldReduceMotion ? {} : {
             duration: tech.duration,
             delay: tech.delay,
             repeat: Infinity,
@@ -99,12 +102,13 @@ function FloatingTechComponent({ intensity = "medium", className = "" }: Floatin
             top: `${Math.random() * 100}%`,
             borderRadius: i % 3 === 0 ? '50%' : i % 3 === 1 ? '0' : '4px'
           }}
-          animate={{
+          whileInView={shouldReduceMotion ? {} : {
             rotate: [0, 360],
             scale: [0.8, 1.3, 0.9],
             opacity: [0.1, 0.3, 0.1]
           }}
-          transition={{
+          viewport={{ amount: 0.1 }}
+          transition={shouldReduceMotion ? {} : {
             duration: 20 + Math.random() * 15,
             delay: Math.random() * 10,
             repeat: Infinity,

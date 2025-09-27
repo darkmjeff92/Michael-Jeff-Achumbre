@@ -2,16 +2,12 @@
 
 import { Suspense, lazy } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import {
-  FadeIn,
-  SlideIn,
   HoverScale,
-  Floating,
-  StaggerContainer,
+  InViewFloating,
+  InViewStaggerContainer,
   StaggerItem,
-  ScrollReveal,
-  GradientShine
+  ScrollReveal
 } from "@/components/animated-elements"
 
 // Dynamic import for background animation
@@ -24,7 +20,7 @@ export function SkillsSection() {
       icon: "🌐",
       technologies: "React 19, Next.js 15, TypeScript, Tailwind CSS v4",
       description: "Responsive web applications with modern design systems",
-      experience: "Mastered through evening coding sessions and real client projects",
+      experience: "Developed through focused coding sessions and real client projects",
       enhancement: "Strategic use of Cursor IDE, Claude Code CLI, and GitHub Copilot for accelerated development"
     },
     {
@@ -73,16 +69,16 @@ export function SkillsSection() {
           </div>
         </ScrollReveal>
 
-        <StaggerContainer staggerDelay={0.2} className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
+        <InViewStaggerContainer staggerDelay={0.2} className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
           {skillCategories.map((skill, index) => (
             <StaggerItem key={index}>
               <HoverScale scale={1.02}>
                 <Card className="h-full bg-lightning-gray/50 border-lightning-gray hover:border-lightning-yellow/50 transition-all duration-300">
                   <CardHeader className="pb-4">
                     <div className="flex items-center gap-3 mb-2">
-                      <Floating intensity={6} duration={3 + index * 0.5}>
+                      <InViewFloating intensity={6} duration={3 + index * 0.5}>
                         <div className="text-3xl sm:text-4xl">{skill.icon}</div>
-                      </Floating>
+                      </InViewFloating>
                       <CardTitle className="text-lightning-yellow text-xl sm:text-2xl">
                         {skill.title}
                       </CardTitle>
@@ -118,48 +114,8 @@ export function SkillsSection() {
               </HoverScale>
             </StaggerItem>
           ))}
-        </StaggerContainer>
+        </InViewStaggerContainer>
 
-        {/* Development Schedule */}
-        <ScrollReveal>
-          <div className="mt-12 lg:mt-16">
-            <GradientShine>
-              <Card className="bg-lightning-gradient/10 border-lightning-yellow">
-                <CardHeader>
-                  <CardTitle className="text-lightning-yellow text-xl sm:text-2xl text-center">
-                    ⚡ Development Schedule
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <h4 className="text-lightning-yellow font-semibold mb-3">Weekdays</h4>
-                      <ul className="text-gray-300 space-y-2 text-sm">
-                        <li>• <strong>9 PM - 1 AM Korean Time</strong> (perfect for international collaboration)</li>
-                        <li>• Quick responses during breaks</li>
-                        <li>• Detailed discussions in evenings</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="text-lightning-yellow font-semibold mb-3">Weekends</h4>
-                      <ul className="text-gray-300 space-y-2 text-sm">
-                        <li>• <strong>Full days available</strong> for major progress</li>
-                        <li>• Sundays guaranteed for development</li>
-                        <li>• Focus: Limited time means maximum efficiency</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="mt-6 text-center">
-                    <p className="text-gray-400 italic">
-                      Dedicated development blocks ensure maximum focus and efficiency during coding sessions.
-                      No distractions, no meetings — just pure development work and strategic skill advancement.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </GradientShine>
-          </div>
-        </ScrollReveal>
       </div>
     </section>
   )
